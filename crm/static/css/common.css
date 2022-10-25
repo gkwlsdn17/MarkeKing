@@ -29,21 +29,13 @@ ol, ul, li {
 
 header{
     width: 100%;
-}
-/* nav > ul{
-    overflow: hidden;
-} */
-.navbar-nav{
-    float:right;
-}
-.nav-item .nav-link{
-    float:left;
-}
-
-.header-nav{
+    height: 80px;
     background-color: gray;
     overflow: hidden;
 }
+.login-bar { float: right; }
+#welcome { float:left; margin: 5px;}
+.login-bar > a { color: white; text-decoration: none; margin: 20px;}
 
 .logo{
     text-decoration: none;
