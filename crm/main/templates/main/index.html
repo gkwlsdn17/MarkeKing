@@ -16,12 +16,13 @@
 
     <link rel="stylesheet" type="text/css" href="static/css/common.css">
 
+
 </head>
 <body>
     <header>
         <div class="login-bar">
-            <div id="welcome">환영합니다</div>
-            <a href="#">로그아웃</a>
+            <div id="welcome">{{ request.session.user_name }}님 환영합니다</div>
+            <a href="login/logout">로그아웃</a>
         </div>
         <nav class="header-nav">
             <a class="logo header-nav" href="#">마케킹</a>

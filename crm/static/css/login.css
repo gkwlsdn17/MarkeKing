@@ -1,0 +1,14 @@
+
+*{
+    margin: 0;
+    padding: 0;
+    text-decoration: none;
+    display: block;
+    text-align: center;
+}
+
+#header{ margin: 55px 40% 40px 40%;}
+#container{ margin: 0px 40% 10px 40%; }
+#msg{ margin-bottom: 20px; height: 20px; color: red;}
+.textbox{ width: 300px; height: 30px; margin: 10px 10px; }
+#login{ margin-top: 20px; }
