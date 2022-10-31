@@ -20,18 +20,24 @@
     
 </head>
 <body>
-    <div id="header">
-        <h1>MarkeKing</h1>
+    <div id="border">
+        <div id="header">
+            <h1>MarkeKing</h1>
+        </div>
+        <div id="container">
+            <div id="msg">
+                
+            </div>
+            <form action="./login/" method="POST" onsubmit="return loginCheck()">{% csrf_token %}
+                <h6>ID</h6>
+                <input class="textbox" type="text" id="id" name="user_id"/>
+                <h6>PW</h6>
+                <input class="textbox" type="password" id="pw" name="user_pw"/>
+                <input class="textbox" type="submit" id="loginBtn" value="Log In"/>
+                <input class="textbox" type="button" value="Sign In"/>
+            </form>
+        </div>
     </div>
-    <div id="container">
-        <div id="msg"> </div>
-        <form action="./login/" method="POST" onsubmit="return loginCheck()">{% csrf_token %}
-            <input class="textbox" type="text" id="id" name="id"/>
-            <input class="textbox" type="password" id="pwd" name="pwd"/>
-            <input class="textbox" type="submit" id="loginBtn" value="Log In"/>
-            <input class="textbox" type="button" value="Sign In"/>
-        </form>
-        
-    </div>
+    
 </body>
 </html>
