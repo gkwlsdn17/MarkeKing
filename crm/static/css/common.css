@@ -29,33 +29,34 @@ ol, ul, li {
 
 header{
     width: 100%;
-    height: 80px;
+    height: 100px;
     background-color: gray;
     overflow: hidden;
 }
-.login-bar { float: right; }
-#welcome { float:left; margin: 5px;}
-.login-bar > a { color: white; text-decoration: none; margin: 20px;}
-
-.logo{
+#login-bar { width: 100%; height: 30px; overflow: hidden;}
+#login-bar > div { float: right; }
+#login-bar > div > div { float:left; margin: 5px; }
+#login-bar > div > a {  
+    color: white; 
+    margin: 20px;
     text-decoration: none;
-    color:white;
 }
 
-.header-nav > a{
+#header-nav{ width: 100%; height: 70px; }
+
+#header-nav > a{
     float: left;
     margin-left: 5%;
     font-size: 40px;
     text-align: center;
+    text-decoration: none;
+    color: white;
 }
-
-.header-nav > ul{
-    float: right;
-    position: relative;
-    left: -50%;
-}
-.header-nav > ul > li > a{
+#header-nav > a:hover { color: white;}
+#header-nav  > ul > li { padding-top: 15px; }
+#header-nav > ul > li > a{
     color: white;
     text-decoration: none;
-    margin-right: 15px;
+    margin-left: 5%;
 }
+#header-nav > ul > li > #header-nav-first{ margin-left: 20%;}
