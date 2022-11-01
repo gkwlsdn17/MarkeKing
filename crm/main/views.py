@@ -7,3 +7,6 @@ def index(request):
         return render(request, 'main/index.html')
     else:
         return redirect('login_home')
+
+def selectCustomer(request):
+    return render(request, 'main/customer.html')
