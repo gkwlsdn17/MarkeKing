@@ -16,6 +16,19 @@
     
 </head>
 <body>
+   
+    {% extends 'main/base.html' %}
     
+    {% block contents %}
+    <div id="container">
+        {% for page_number in page_obj.paginator.page_range %}
+        {% if page_number == page_obj.number %}
+            <li><a style="color:red;">{{ page_number }}</a></li>
+        {% else %}
+        <li><a style="color:black;">{{ page_number }}</a></li>
+        {% endif %} 
+        {% endfor %}
+    </div>
+    {% endblock %}
 </body>
 </html>

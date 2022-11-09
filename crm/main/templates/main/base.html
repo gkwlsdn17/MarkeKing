@@ -1,0 +1,30 @@
+{% load static %}
+<html>
+    <head>
+        <link rel="stylesheet" type="text/css" href="{% static 'css/common.css' %}">
+    </head>
+    <body>
+        <header>
+            <div id="login-bar">
+                <div>
+                    <div id="welcome">{{ request.session.user_name }}님 환영합니다</div>
+                    <a href="/login/logout">로그아웃</a>
+                </div>
+            </div>
+            <div id="header-nav">
+                <a href="#">마케킹</a>
+                <ul>
+                    <li>
+                        <a id="header-nav-first" href="#">홈</a>
+                        <a class="" href="/customer">고객 관리</a>
+                        <a class="" href="#">매출 관리</a>
+                        <a class="" href="#">경영 관리</a>
+                        <a class="" href="#">제품 관리</a>
+                    </li>
+                </ul>
+            </div>
+        </header>
+        {% block contents %} 
+        {% endblock %}
+    </body>
+</html>
