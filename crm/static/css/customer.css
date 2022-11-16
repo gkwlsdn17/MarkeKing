@@ -1,23 +1,4 @@
 
-#container{
-    overflow: hidden;
-    display: block;
-}
-
-#content_menu{
-    width: 10%;
-    height: 780px;
-    float: left;
-    border: 1px solid black;
-}
-
-#content_menu > div{ text-align: center; margin-top: 50px; }
-#content_menu > div > ul > li{ margin-top: 20px; }
-
-#content{
-    width:90%;
-    float: left;
-}
 #insert_customer{ margin-left: 3%; }
 #customer_list{ margin-left: 10%; overflow-x: auto; white-space:nowrap;}
 #tb_customer_list{ width: 1300px; text-align: center; margin-top: 20px; }
@@ -29,6 +10,7 @@
 .tb_name{ width: 15%; }
 .tb_id{ width: 15%; }
 .tb_email{ width: 20%; }
+#tb_row:hover td{ background-color: skyblue; cursor: pointer;}
 
 #page_bar{ margin-top: 20px; }
 #page_bar > ul{ text-align: center; margin-left: auto; margin-right: auto;}

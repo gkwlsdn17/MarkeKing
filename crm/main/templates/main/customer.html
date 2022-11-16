@@ -14,7 +14,9 @@
     <!-- Latest compiled JavaScript -->
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@4.6.1/dist/js/bootstrap.bundle.min.js"></script>
 
+    <link rel="stylesheet" type="text/css" href="/static/css/customer_common.css">
     <link rel="stylesheet" type="text/css" href="/static/css/customer.css">
+
 </head>
 <body>
    
@@ -53,7 +55,7 @@
                     </thead>
                     <tbody>
                         {% for customer in page_obj %}
-                        <tr>
+                        <tr id="tb_row" onclick="location.href='detail/{{customer.CUSTOMER_ID}}'">
                             <td class="tb">{{ customer.CUSTOMER_NAME }}</td>
                             <td class="tb">{{ customer.CUSTOMER_ID }}</td>
                             <td class="tb">{{ customer.CUSTOMER_BIRTH }}</td>
