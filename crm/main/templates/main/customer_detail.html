@@ -16,11 +16,7 @@
 
     <link rel="stylesheet" type="text/css" href="/static/css/customer_common.css">
     <link rel="stylesheet" type="text/css" href="/static/css/customer_detail.css">
-
-    <script>
-        // $('input[name=last_visit]').attr('value',new Date().toISOString().slice(0, 7))
-        // document.getElementsByName('last_visit').value = new Date().toISOString().slice(0, 7)
-    </script>
+    <script src="/static/js/customer_detail.js"></script>
 
 </head>
 <body>
@@ -32,7 +28,7 @@
         <div id="content_menu">
             <div>
                 <ul>
-                    <li><a>1번메뉴</a></li>
+                    <li><a href="/customer">고객정보</a></li>
                     <li><a>2번메뉴</a></li>
                     <li><a>3번메뉴</a></li>
                     <li><a>4번메뉴</a></li>
@@ -42,23 +38,22 @@
             
         </div>
         <div id="content">
-            <div id="update_box">
+            <div id="detail_info" class="customer-input-div">
                 <form id="update_form" action="/customer/update/" method="post"> {% csrf_token %}
-                
-                    고객 아이디: <input type="text" name="customer_id" value="{{customer.CUSTOMER_ID}}"> <br/>
-                    <!-- 고객 패스워드: <input type="password" name="customer_pw"> <br/> -->
-                    고객 이름: <input type="text" name="customer_name" value="{{customer.CUSTOMER_NAME}}"> <br/>
-                    고객 생일: <input type="text" name="customer_birth" value="{{customer.CUSTOMER_BIRTH}}"> <br/>
-                    고객 핸드폰: <input type="text" name="customer_phone" value="{{customer.CUSTOMER_PHONE}}"> <br/>
-                    고객 이메일: <input type="email" name="customer_email" value="{{customer.CUSTOMER_EMAIL}}"> <br/>
-                    고객 주소: <input type="text" name="customer_addr" value="{{customer.CUSTOMER_ADDR}}"> <br/>
-                    <!-- 고객 방문횟수: <input type="number" name="visit_cnt"> <br/> -->
-                    고객 등급: <input type="number" name="customer_rating" value="{{customer.CUSTOMER_RATING}}"> <br/>
+                    <div>고객 아이디: <input type="text" name="customer_id" value="{{customer.CUSTOMER_ID}}"></div>
+                    <div>고객 이름: <input type="text" name="customer_name" value="{{customer.CUSTOMER_NAME}}"></div>
+                    <div>고객 생일: <input type="text" name="customer_birth" value="{{customer.CUSTOMER_BIRTH}}"></div>
+                    <div>고객 핸드폰: <input type="text" name="customer_phone" value="{{customer.CUSTOMER_PHONE}}"></div>
+                    <div>고객 이메일: <input type="email" name="customer_email" value="{{customer.CUSTOMER_EMAIL}}"></div>
+                    <div>고객 주소: <input type="text" name="customer_addr" value="{{customer.CUSTOMER_ADDR}}"></div>
+                    <div>고객 등급: <input type="number" name="customer_rating" value="{{customer.CUSTOMER_RATING}}"></div>
                 </form>
-                <button type="submit" form="update_form">수정</button>
+                <div>
+                    <button class="btn" id="btn_update" type="submit" form="update_form">수정</button>
+                    <button class="btn" id="btn_delete" type="button" onclick="delCustomer('{{customer.id}}')">삭제</button>
+                </div>
+                
             </div>
-            
-         
         </div>
         
        

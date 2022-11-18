@@ -1,3 +1,8 @@
-#update_box{
-    margin: 20px auto;
+
+#btn_update{
+    float: left;
+}
+
+#btn_delete{
+    margin-left: 10px;
 }

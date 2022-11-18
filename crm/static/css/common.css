@@ -1,4 +1,8 @@
 /* 초기화 */
+body{
+    min-width: 1920px;
+}
+
 html, body, div, span, applet, object, iframe,
 h1, h2, h3, h4, h5, h6, p, blockquote, pre,
 a, abbr, acronym, address, big, cite, code,
@@ -60,3 +64,21 @@ header{
     margin-left: 5%;
 }
 #header-nav > ul > li > #header-nav-first{ margin-left: 20%;}
+
+.btn{
+    
+    border: none;
+    border-radius: 10px;
+    text-decoration: none;
+    font-weight: 400;
+    transition: 0.25s;
+    background-color: #282B3D;
+    color: white;
+
+}
+
+.btn:hover {
+	color: white;
+    background: #282B3D;
+    opacity: 80%;
+}

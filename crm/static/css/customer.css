@@ -1,7 +1,12 @@
+#content > div{ width: 1600px;}
 
-#insert_customer{ margin-left: 3%; }
-#customer_list{ margin-left: 10%; overflow-x: auto; white-space:nowrap;}
-#tb_customer_list{ width: 1300px; text-align: center; margin-top: 20px; }
+#insert_customer{ float:right; margin-top: 30px; }
+#customer_list{ 
+    margin-left: 10%; 
+    overflow-x: auto; white-space:nowrap; 
+    clear: right;
+}
+#tb_customer_list{  text-align: center; margin-top: 20px; }
 #tb_customer_list > thead > tr > th{ background-color: black; color: white; }
 #tb_customer_list > thead > tr, #tb_customer_list > tbody > tr{ height: 50px; }
 #tb_customer_list > tbody > tr:nth-child(odd){ background-color: white; }
@@ -17,3 +22,6 @@
 #page_bar ul > li{ display: inline-block; margin-left: 10px; }
 #page_bar ul > li > a{ font-size: 20px;}
 
+.search-bar{ margin-top: 20px; text-align: center;}
+.search-bar > input{ width: 300px; }
+.search-bar > button{ margin-left: 5px; }
