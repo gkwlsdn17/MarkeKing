@@ -4,6 +4,8 @@ from django.db.models import Q
 from ..decorators import login_required
 from ..models import *
 import datetime
+from dateutil.relativedelta import relativedelta
+from django.utils.dateparse import parse_datetime
 
 @login_required
 def selectCustomer(request):
@@ -127,8 +129,60 @@ def deleteCustomer(request, cid):
     except:
        return redirect('customer_detail', customer_id=cid)
     
+@login_required
+def pageCustomerDetailSearch(request):
 
+    q = Q()
+    customer_name = request.GET.get('name', None)
+    customer_id = request.GET.get('id', None)
+    s_age = request.GET.get('s_age', None)
+    e_age = request.GET.get('e_age', None)
+    customer_phone = request.GET.get('phone', None)
+    customer_email = request.GET.get('email', None)
+    customer_addr = request.GET.get('addr', None)
+    customer_rating = request.GET.get('rating', None)
+    s_visit = request.GET.get('s_visit', None)
+    e_visit = request.GET.get('e_visit', None)
+    s_cnt = request.GET.get('s_cnt', None)
+    e_cnt = request.GET.get('e_cnt', None)
 
-def searchCondition(condition):
-    return "CUSTOMER_" + condition
-    
+    if customer_name:
+        q &= Q(CUSTOMER_NAME__contains = customer_name)
+    if customer_id:
+        q &= Q(CUSTOMER_ID__contains = customer_id)
+    if s_age and e_age:
+        s_year = (datetime.datetime.now() - relativedelta(years=int(s_age)-1)).year
+        e_year = (datetime.datetime.now() - relativedelta(years=int(e_age)-1)).year
+        if e_year < s_year:
+            s_year , e_year = e_year , s_year
+        q &= Q(CUSTOMER_BIRTH__range=(f'{s_year}0101', f'{e_year+1}0101'))
+    if customer_phone:
+        q &= Q(CUSTOMER_PHONE__contains = customer_phone)
+    if customer_email:
+        q &= Q(CUSTOMER_EMAIL__contains = customer_email)
+    if customer_addr:
+        q &= Q(CUSTOMER_ADDR__contains = customer_addr)
+    if customer_rating:
+        q &= Q(CUSTOMER_RATING__contains = customer_rating)
+    if s_visit and e_visit:
+        if e_visit < s_visit:
+            s_visit , e_visit = e_visit , s_visit
+        
+        s_visit = parse_datetime(s_visit)
+        e_visit = parse_datetime(e_visit)
+        e_visit = e_visit + relativedelta(days=1)
+        q &= Q(LAST_VISIT__range=(s_visit,e_visit))
+    if s_cnt and e_cnt:
+        if e_cnt < s_cnt:
+            s_cnt , e_cnt = e_cnt , s_cnt
+        print(s_cnt, e_cnt)
+        q &= Q(VISIT_CNT__range=(s_cnt, e_cnt))
+
+    q &= Q(DISCARD = False)
+
+    customer_list = Customer.objects.all().filter(q) 
+    page = request.GET.get('page', '1')
+    paginator = Paginator(customer_list, '10')
+    page_obj = paginator.page(page)
+
+    return render(request, 'main/customer_detail_search.html', {'page_obj': page_obj})

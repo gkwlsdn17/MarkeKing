@@ -9,7 +9,6 @@ urlpatterns = [
     path('customer/detail/<str:customer_id>', customer_views.pageCustomerDetail, name="customer_detail"),
     path('customer/update/', customer_views.updateCustomer, name="customer_update"),
     path('customer/delete/<int:cid>', customer_views.deleteCustomer, name="customer_delete"),
+    path('customer/search/detail', customer_views.pageCustomerDetailSearch, name="customer_detail_search"),
     
-    
-
 ]

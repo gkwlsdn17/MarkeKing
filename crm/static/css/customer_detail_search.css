@@ -1,0 +1,38 @@
+#content > div{ width: 1600px; margin-left: 10%; }
+
+#search_box{
+    margin-bottom: 20px;
+    margin-top: 40px;
+    clear: left;
+    margin-left: 10%;
+}
+.search-row > div{ float: left; margin-left: 10px; width: 400px; margin-bottom: 10px; }
+.search-row{ clear: left; }
+.input-search{ margin-left: 10px; }
+.input-number{ width: 50px; }
+
+#customer_list{ 
+    overflow-x: auto; white-space:nowrap; 
+    clear: right;
+    clear: left;
+}
+#tb_customer_list{  text-align: center; margin-top: 20px; }
+#tb_customer_list > thead > tr > th{ background-color: black; color: white; }
+#tb_customer_list > thead > tr, #tb_customer_list > tbody > tr{ height: 50px; }
+#tb_customer_list > tbody > tr:nth-child(odd){ background-color: white; }
+#tb_customer_list > tbody > tr:nth-child(even){ background-color: #EDEFF1; }
+.tb{ width: 10%; padding: 5px;}
+.tb_name{ width: 15%; }
+.tb_id{ width: 15%; }
+.tb_email{ width: 20%; }
+#tb_row:hover td{ background-color: skyblue; cursor: pointer;}
+
+#page_bar{ margin-top: 20px; }
+#page_bar > ul{ text-align: center; margin-left: auto; margin-right: auto;}
+#page_bar ul > li{ display: inline-block; margin-left: 10px; }
+#page_bar ul > li > a{ font-size: 20px;}
+
+.search-bar{ margin-top: 20px; text-align: center;}
+.search-bar > input{ width: 300px; }
+.search-bar > button{ margin-left: 5px; }
+

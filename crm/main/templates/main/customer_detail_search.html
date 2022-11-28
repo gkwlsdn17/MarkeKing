@@ -15,13 +15,67 @@
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@4.6.1/dist/js/bootstrap.bundle.min.js"></script>
 
     <link rel="stylesheet" type="text/css" href="/static/css/customer_common.css">
-    <link rel="stylesheet" type="text/css" href="/static/css/customer.css">
+    <link rel="stylesheet" type="text/css" href="/static/css/customer_detail_search.css">
 
     <script>
         function search(){
-            var condition = $("select[name=condition]").val();
-            var keyword = $("input[name=keyword]").val();
-            location.href="/customer?" + condition + "=" + keyword;
+            var param = '';
+            var name = $("input[name=search_name]").val();
+            var id = $("input[name=search_id]").val();
+            var s_age = $("input[name=search_start_age]").val();
+            var e_age = $("input[name=search_end_age]").val();
+            var phone = $("input[name=search_phone]").val();
+            var email = $("input[name=search_email]").val();
+            var addr = $("input[name=search_addr]").val();
+            var rating = $("input[name=search_rating]").val();
+            var s_visit = $("input[name=search_start_visit]").val();
+            var e_visit = $("input[name=search_end_visit]").val();
+            var s_cnt = $("input[name=search_start_cnt]").val();
+            var e_cnt = $("input[name=search_end_cnt]").val();
+            
+            if(isNaN(s_age) || isNaN(e_age)){
+                alert('나이는 숫자로 입력하세요')
+                return;
+            }
+
+            if(s_age < 0 || e_age < 0){
+                alert('나이는 음수가 될 수 없습니다.')
+                return;
+            }
+
+            if(isNaN(s_cnt) || isNaN(e_cnt)){
+                alert('방문횟수는 숫자로 입력하세요')
+                return;
+            }
+
+            if(s_cnt < 0 || e_cnt < 0){
+                alert('방문횟수는 음수가 될 수 없습니다.')
+                return;
+            }
+
+            param = paramString(param, 'name', name);
+            param = paramString(param, 'id', id);
+            param = paramString(param, 's_age', s_age);
+            param = paramString(param, 'e_age', e_age);
+            param = paramString(param, 'email', email);
+            param = paramString(param, 'addr', addr);
+            // param = paramString(param, 'rating', rating);
+            param = paramString(param, 's_visit', s_visit);
+            param = paramString(param, 'e_visit', e_visit);
+            param = paramString(param, 's_cnt', s_cnt);
+            param = paramString(param, 'e_cnt', e_cnt);
+           
+            location.href="/customer/search/detail?" + param;
+        }
+
+        function paramString(param, type, value){
+            value = typeof value === 'string' ? value.trim() : value
+            if(value != ''){
+                if(param != '') param += '&'
+                param += type + "=" + value;
+            }
+            
+            return param;
         }
     </script>
 </head>
@@ -43,9 +97,33 @@
         </div>
         <div id="content">
             <div>
-                <div>
-                    <a href="insert/view/" id="insert_customer" class="btn">고객추가</a>
+                <div id="search_box">
+                    <div class="search-row">
+                        <div>이름: <input type="text" class="input-search" name="search_name"/></div>
+                        <div>아이디: <input type="text" class="input-search" name="search_id"/></div>
+                        <div>나이: <input type="text" class="input-search input-number" name="search_start_age"/> ~ <input type="text" class="input-search input-number" name="search_end_age"/></div>
+                    </div>
+                    <div class="search-row">
+                        <div>전화번호: <input type="text" class="input-search" name="search_phone"/></div>
+                        <div>이메일: <input type="text" class="input-search" name="search_email"/></div>
+                        <div>등급: 
+                            <select name="search_rating">
+                                <option></option>
+                            </select>
+                        </div>
+                    </div>
+                    
+                    <div class="search-row">
+                        <div>주소: <input type="text" class="input-search" name="search_addr"/></div>
+                    </div>
+                    
+                    <div class="search-row">
+                        <div>방문일: <input type="date" class="input-search" name="search_start_visit"/> ~ <input type="date" class="input-search" name="search_end_visit"/></div>
+                        <div>방문 횟수: <input type="number" class="input-search input-number" name="search_start_cnt"/> ~ <input type="number" class="input-search input-number" name="search_end_cnt"/></div>
+                        <button class="btn" onclick="search()">검색</button>
+                    </div>
                 </div>
+                
                 <div id="customer_list">
                     <table id="tb_customer_list">
                         <thead>
@@ -64,7 +142,7 @@
                         </thead>
                         <tbody>
                             {% for customer in page_obj %}
-                            <tr id="tb_row" onclick="location.href='detail/{{customer.CUSTOMER_ID}}'">
+                            <tr id="tb_row" onclick="location.href='/customer/detail/{{customer.CUSTOMER_ID}}'">
                                 <td class="tb">{{ customer.CUSTOMER_NAME }}</td>
                                 <td class="tb">{{ customer.CUSTOMER_ID }}</td>
                                 <td class="tb">{{ customer.CUSTOMER_BIRTH }}</td>
@@ -105,21 +183,6 @@
                             {% endif %}
                         </ul>
                         
-                    </div>
-
-                    <div class="search-bar">
-                        <select name="condition">
-                            <option value="all">==선택==</option>
-                            <option value="name">이름</option>
-                            <option value="id">아이디</option>
-                            <option value="birth">생년월일</option>
-                            <option value="phone">전화번호</option>
-                            <option value="email">이메일</option>
-                            <option value="addr">주소</option>
-                            <option value="rating">등급</option>
-                        </select>
-                        <input type="text" name="keyword">
-                        <button class="btn" onclick="search()">검색</button>
                     </div>
                 </div>
             </div>
