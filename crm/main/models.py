@@ -15,3 +15,8 @@ class Customer(models.Model):
     CUSTOMER_RATING = models.IntegerField(default=0)
     CRTIME = models.DateTimeField(auto_now=True)
     DISCARD = models.BooleanField(default=False)
+
+class Rating(models.Model):
+    NAME = models.CharField(max_length=20)
+    ORDER = models.IntegerField(default=0)
+    DISCARD = models.BooleanField(default=False)

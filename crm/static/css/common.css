@@ -63,7 +63,7 @@ header{
     text-decoration: none;
     margin-left: 5%;
 }
-#header-nav > ul > li > #header-nav-first{ margin-left: 20%;}
+#header-nav > ul > li > a:first-child{ margin-left: 20%;}
 
 .btn{
     

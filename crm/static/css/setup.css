@@ -1,0 +1,36 @@
+
+#container{
+    overflow: hidden;
+    display: block;
+}
+
+#content_menu{
+    width: 10%;
+    height: 780px;
+    float: left;
+    border: 1px solid black;
+}
+
+#content_menu > div{ text-align: center; margin-top: 50px; }
+#content_menu > div > ul > li{ margin-top: 20px; }
+#content_menu > div > ul > li > a{ text-decoration: none; color: black;}
+#content_menu > div > ul > li > a:hover{ color: gray; }
+
+#content{
+    width:90%;
+    float: left;
+    position: relative;
+}
+
+#rating{ width: 350px; height: 400px; margin-left: 10%; margin-top: 40px; }
+#rating_title{ overflow: hidden; }
+#rating_name{ width: 100px; margin-left: 5px; }
+#rating_order{ width: 80px;}
+#tb_rating{  text-align: center; margin-top: 20px; clear: left; }
+#tb_rating > thead > tr > th{ background-color: black; color: white; }
+#tb_rating > thead > tr, #tb_customer_list > tbody > tr{ height: 30px; }
+#tb_rating > tbody > tr:nth-child(odd){ background-color: white; }
+#tb_rating > tbody > tr:nth-child(even){ background-color: #EDEFF1; }
+.tb{ width: 100px; padding: 5px;}
+#tb_rating > tbody > tr > td:first-child{ width: 150px; }
+#tb_row:hover td{ background-color: skyblue; cursor: pointer;}

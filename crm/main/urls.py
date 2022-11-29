@@ -1,5 +1,5 @@
 from django.urls import path
-from .views import main_views, customer_views
+from .views import main_views, customer_views, setup_views
 
 urlpatterns = [
     path('', main_views.index),
@@ -10,5 +10,7 @@ urlpatterns = [
     path('customer/update/', customer_views.updateCustomer, name="customer_update"),
     path('customer/delete/<int:cid>', customer_views.deleteCustomer, name="customer_delete"),
     path('customer/search/detail', customer_views.pageCustomerDetailSearch, name="customer_detail_search"),
-    
+    path('setup/', setup_views.pageSetup, name="pageSetup"),
+    path('setup/insert/rating/', setup_views.insertRating, name="insert_rating"),
+    path('setup/delete/<int:id>/', setup_views.deleteRating, name="delete_rating"),
 ]
