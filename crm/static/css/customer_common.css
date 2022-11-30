@@ -29,6 +29,7 @@
 }
 
 .customer-input-div > form > div{ margin-top: 10px; }
+.customer-input-div> form > div > select{  width: 100%; }
 .customer-input-div> form > div > input{ width: 100%; }
 .customer-input-div > div{
     margin-top:30px;

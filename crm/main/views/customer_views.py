@@ -41,7 +41,7 @@ def selectCustomer(request):
     if customer_addr:
         q &= Q(CUSTOMER_ADDR__contains = customer_addr)
     if customer_rating:
-        q &= Q(CUSTOMER_RATING__contains = customer_rating)
+        q &= Q(CUSTOMER_RATING__NAME__icontains = customer_rating)
 
     q &= Q(DISCARD = False)
 
@@ -54,34 +54,41 @@ def selectCustomer(request):
 
 @login_required
 def pageInsertCustomer(request):
-    return render(request, 'main/customer_insert.html')
+    ratings = Rating.objects.all().filter(DISCARD=False)
+    content = {'ratings': ratings}
+    return render(request, 'main/customer_insert.html', content)
 
 @login_required
 def insertCustomer(request):
-    id = request.POST.get('customer_id')
-    pw = request.POST.get('customer_pw')
-    name = request.POST.get('customer_name')
-    birth = request.POST.get('customer_birth')
-    phone = request.POST.get('customer_phone')
-    email = request.POST.get('customer_email')
-    addr = request.POST.get('customer_addr')
-    visit_cnt = request.POST.get('visit_cnt')
-    rating = request.POST.get('customer_rating')
+    try:
+        id = request.POST.get('customer_id')
+        pw = request.POST.get('customer_pw')
+        name = request.POST.get('customer_name')
+        birth = request.POST.get('customer_birth')
+        phone = request.POST.get('customer_phone')
+        email = request.POST.get('customer_email')
+        addr = request.POST.get('customer_addr')
+        visit_cnt = request.POST.get('visit_cnt')
+        rating = request.POST.get('customer_rating')
 
-    customer = Customer(
-        CUSTOMER_ID = id,
-        CUSTOMER_PW = pw,
-        CUSTOMER_NAME = name,
-        CUSTOMER_BIRTH = birth,
-        CUSTOMER_PHONE = phone,
-        CUSTOMER_EMAIL = email,
-        CUSTOMER_ADDR = addr,
-        LAST_VISIT = datetime.datetime.now(),
-        VISIT_CNT = visit_cnt,
-        CUSTOMER_RATING = rating)
+        robj = Rating.objects.get(id = rating)
 
-    print(customer)
-    customer.save()
+        customer = Customer(
+            CUSTOMER_ID = id,
+            CUSTOMER_PW = pw,
+            CUSTOMER_NAME = name,
+            CUSTOMER_BIRTH = birth,
+            CUSTOMER_PHONE = phone,
+            CUSTOMER_EMAIL = email,
+            CUSTOMER_ADDR = addr,
+            LAST_VISIT = datetime.datetime.now(),
+            VISIT_CNT = visit_cnt,
+            CUSTOMER_RATING = robj)
+
+        print(customer)
+        customer.save()
+    except Exception as e:
+        print(e)
     
     return redirect("customer_home")
 
@@ -92,7 +99,8 @@ def pageCustomerDetail(request, customer_id):
             return redirect("customer_home")
 
         customer = Customer.objects.get(CUSTOMER_ID=customer_id)
-        content = {'customer': customer}
+        ratings = Rating.objects.all().filter(DISCARD = False)
+        content = {'customer': customer, 'ratings': ratings}
         return render(request, 'main/customer_detail.html', content)
     except:
         return redirect("customer_home")
@@ -107,13 +115,15 @@ def updateCustomer(request):
         email = request.POST.get('customer_email')
         addr = request.POST.get('customer_addr')
         rating = request.POST.get('customer_rating')
+
+        robj = Rating.objects.get(id = rating)
         customer = Customer.objects.get(CUSTOMER_ID = id)
         customer.CUSTOMER_NAME = name
         customer.CUSTOMER_BIRTH = birth
         customer.CUSTOMER_PHONE = phone
         customer.CUSTOMER_EMAIL = email
         customer.CUSTOMER_ADDR = addr
-        customer.CUSTOMER_RATING = rating
+        customer.CUSTOMER_RATING = robj
         customer.save()
         return redirect("customer_home")
     except:

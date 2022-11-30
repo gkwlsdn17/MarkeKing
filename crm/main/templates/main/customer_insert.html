@@ -47,7 +47,14 @@
                     <div>고객 이메일: <input type="email" name="customer_email"></div>
                     <div>고객 주소: <input type="text" name="customer_addr"></div>
                     <div>고객 방문횟수: <input type="number" name="visit_cnt"></div>
-                    <div>고객 등급: <input type="number" name="customer_rating"></div>
+                    <!-- <div>고객 등급: <input type="number" name="customer_rating"></div> -->
+                    <div>고객 등급:
+                        <select name="customer_rating">
+                            {% for rating in ratings %}
+                                <option value="{{rating.id}}">{{rating.NAME}}</option>
+                            {% endfor %}
+                        </select>
+                    </div>
                 </form>
                 <div>
                     <button class="btn" type="submit" form="insert_form">고객 추가</button>

@@ -74,7 +74,7 @@
                                 <td class="tb">{{ customer.FIRST_VISIT | date:'y-m-d'}}</td>
                                 <td class="tb">{{ customer.LAST_VISIT | date:'y-m-d'}}</td>
                                 <td class="tb">{{ customer.VISIT_CNT }}</td>
-                                <td class="tb">{{ customer.CUSTOMER_RATING }}</td>
+                                <td class="tb">{{ customer.CUSTOMER_RATING.NAME }}</td>
                             </tr>
                             {% endfor %}
                         </tbody>

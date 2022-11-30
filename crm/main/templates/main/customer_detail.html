@@ -46,7 +46,19 @@
                     <div>고객 핸드폰: <input type="text" name="customer_phone" value="{{customer.CUSTOMER_PHONE}}"></div>
                     <div>고객 이메일: <input type="email" name="customer_email" value="{{customer.CUSTOMER_EMAIL}}"></div>
                     <div>고객 주소: <input type="text" name="customer_addr" value="{{customer.CUSTOMER_ADDR}}"></div>
-                    <div>고객 등급: <input type="number" name="customer_rating" value="{{customer.CUSTOMER_RATING}}"></div>
+                    <!-- <div>고객 등급: <input type="number" name="customer_rating" value="{{customer.CUSTOMER_RATING}}"></div> -->
+                    <div>고객 등급:
+                        <select name="customer_rating">
+                            {% for rating in ratings %}
+                                {% if rating.id == customer.CUSTOMER_RATING %}
+                                    <option selected value="{{rating.id}}">{{rating.NAME}}</option>
+                                {% else %}
+                                    <option value="{{rating.id}}">{{rating.NAME}}</option>
+                                {% endif %}
+                                
+                            {% endfor %}
+                        </select>
+                    </div>
                 </form>
                 <div>
                     <button class="btn" id="btn_update" type="submit" form="update_form">수정</button>
