@@ -20,49 +20,33 @@
 </head>
 <body>
    
-    {% extends 'main/base.html' %}
+    {% extends 'main/customer_base_side.html' %}
     
-    {% block contents %}
-    <div id="container">
-        <div id="content_menu">
-            <div>
-                <ul>
-                    <li><a href="/customer">고객정보</a></li>
-                    <li><a href="/customer/search/detail">상세검색</a></li>
-                    <li><a>3번메뉴</a></li>
-                    <li><a>4번메뉴</a></li>
-                </ul>
-            </div>
-            
-            
-        </div>
-        <div id="content">
-            <div class="customer-input-div">
-                <form id="insert_form" action="/customer/insert/" method="post"> {% csrf_token %}
-                    <div>고객 아이디: <input type="text" name="customer_id"></div>
-                    <div>고객 패스워드: <input type="password" name="customer_pw"></div>
-                    <div>고객 이름: <input type="text" name="customer_name"></div>
-                    <div>고객 생일: <input type="text" name="customer_birth"></div>
-                    <div>고객 핸드폰: <input type="text" name="customer_phone"></div>
-                    <div>고객 이메일: <input type="email" name="customer_email"></div>
-                    <div>고객 주소: <input type="text" name="customer_addr"></div>
-                    <div>고객 방문횟수: <input type="number" name="visit_cnt"></div>
-                    <!-- <div>고객 등급: <input type="number" name="customer_rating"></div> -->
-                    <div>고객 등급:
-                        <select name="customer_rating">
-                            {% for rating in ratings %}
-                                <option value="{{rating.id}}">{{rating.NAME}}</option>
-                            {% endfor %}
-                        </select>
-                    </div>
-                </form>
-                <div>
-                    <button class="btn" type="submit" form="insert_form">고객 추가</button>
+    {% block main %}
+    <div id="content">
+        <div class="customer-input-div">
+            <form id="insert_form" action="/customer/insert/" method="post"> {% csrf_token %}
+                <div>고객 아이디: <input type="text" name="customer_id"></div>
+                <div>고객 패스워드: <input type="password" name="customer_pw"></div>
+                <div>고객 이름: <input type="text" name="customer_name"></div>
+                <div>고객 생일: <input type="text" name="customer_birth"></div>
+                <div>고객 핸드폰: <input type="text" name="customer_phone"></div>
+                <div>고객 이메일: <input type="email" name="customer_email"></div>
+                <div>고객 주소: <input type="text" name="customer_addr"></div>
+                <div>고객 방문횟수: <input type="number" name="visit_cnt"></div>
+                <!-- <div>고객 등급: <input type="number" name="customer_rating"></div> -->
+                <div>고객 등급:
+                    <select name="customer_rating">
+                        {% for rating in ratings %}
+                            <option value="{{rating.id}}">{{rating.NAME}}</option>
+                        {% endfor %}
+                    </select>
                 </div>
+            </form>
+            <div>
+                <button class="btn" type="submit" form="insert_form">고객 추가</button>
             </div>
         </div>
-        
-       
     </div>
     {% endblock %}
 </body>

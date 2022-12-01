@@ -27,7 +27,7 @@
             var phone = $("input[name=search_phone]").val();
             var email = $("input[name=search_email]").val();
             var addr = $("input[name=search_addr]").val();
-            var rating = $("input[name=search_rating]").val();
+            var rating = $("select[name=search_rating]").val();
             var s_visit = $("input[name=search_start_visit]").val();
             var e_visit = $("input[name=search_end_visit]").val();
             var s_cnt = $("input[name=search_start_cnt]").val();
@@ -60,7 +60,9 @@
             param = paramString(param, 'email', email);
             param = paramString(param, 'addr', addr);
             param = paramString(param, 'phone', phone);
-            // param = paramString(param, 'rating', rating);
+            if(rating != "all"){
+                param = paramString(param, 'rating', rating);
+            }
             param = paramString(param, 's_visit', s_visit);
             param = paramString(param, 'e_visit', e_visit);
             param = paramString(param, 's_cnt', s_cnt);
@@ -82,116 +84,103 @@
 </head>
 <body>
    
-    {% extends 'main/base.html' %}
+    {% extends 'main/customer_base_side.html' %}
     
-    {% block contents %}
-    <div id="container">
-        <div id="content_menu">
-            <div>
-                <ul>
-                    <li><a href="/customer">고객정보</a></li>
-                    <li><a href="/customer/search/detail">상세검색</a></li>
-                    <li><a>고객통계</a></li>
-                    <li><a>4번메뉴</a></li>
-                </ul>
-            </div>
-        </div>
-        <div id="content">
-            <div>
-                <div id="search_box">
-                    <div class="search-row">
-                        <div>이름: <input type="text" class="input-search" name="search_name"/></div>
-                        <div>아이디: <input type="text" class="input-search" name="search_id"/></div>
-                        <div>나이: <input type="text" class="input-search input-number" name="search_start_age"/> ~ <input type="text" class="input-search input-number" name="search_end_age"/></div>
-                    </div>
-                    <div class="search-row">
-                        <div>전화번호: <input type="text" class="input-search" name="search_phone"/></div>
-                        <div>이메일: <input type="text" class="input-search" name="search_email"/></div>
-                        <div>등급: 
-                            <select name="search_rating">
-                                <option></option>
-                            </select>
-                        </div>
-                    </div>
-                    
-                    <div class="search-row">
-                        <div>주소: <input type="text" class="input-search" name="search_addr"/></div>
-                    </div>
-                    
-                    <div class="search-row">
-                        <div>방문일: <input type="date" class="input-search" name="search_start_visit"/> ~ <input type="date" class="input-search" name="search_end_visit"/></div>
-                        <div>방문 횟수: <input type="number" class="input-search input-number" name="search_start_cnt"/> ~ <input type="number" class="input-search input-number" name="search_end_cnt"/></div>
-                        <button class="btn" onclick="search()">검색</button>
+    {% block main %}
+    <div id="content">
+        <div>
+            <div id="search_box">
+                <div class="search-row">
+                    <div>이름: <input type="text" class="input-search" name="search_name"/></div>
+                    <div>아이디: <input type="text" class="input-search" name="search_id"/></div>
+                    <div>나이: <input type="text" class="input-search input-number" name="search_start_age"/> ~ <input type="text" class="input-search input-number" name="search_end_age"/></div>
+                </div>
+                <div class="search-row">
+                    <div>전화번호: <input type="text" class="input-search" name="search_phone"/></div>
+                    <div>이메일: <input type="text" class="input-search" name="search_email"/></div>
+                    <div>등급: 
+                        <select name="search_rating">
+                            <option value="all" selected>전체</option>
+                            {% for rating in ratings %}
+                                <option value="{{rating.id}}">{{rating.NAME}}</option>
+                            {% endfor %}
+                        </select>
                     </div>
                 </div>
                 
-                <div id="customer_list">
-                    <table id="tb_customer_list">
-                        <thead>
-                            <tr>
-                                <th class="tb tb_name">이름</th>
-                                <th class="tb tb_id">아이디</th>
-                                <th class="tb tb_birth">생년월일</th>
-                                <th class="tb_phone">전화번호</th>
-                                <th class="tb_email">이메일</th>
-                                <th class="tb_addr">주소</th>
-                                <th class="tb">첫방문일</th>
-                                <th class="tb">마지막방문일</th>
-                                <th class="tb">방문횟수</th>
-                                <th class="tb">고객등급</th>
-                            </tr>
-                        </thead>
-                        <tbody>
-                            {% for customer in page_obj %}
-                            <tr id="tb_row" onclick="location.href='/customer/detail/{{customer.CUSTOMER_ID}}'">
-                                <td class="tb">{{ customer.CUSTOMER_NAME }}</td>
-                                <td class="tb">{{ customer.CUSTOMER_ID }}</td>
-                                <td class="tb">{{ customer.CUSTOMER_BIRTH }}</td>
-                                <td class="tb">{{ customer.CUSTOMER_PHONE }}</td>
-                                <td class="tb">{{ customer.CUSTOMER_EMAIL }}</td>
-                                <td class="tb">{{ customer.CUSTOMER_ADDR }}</td>
-                                <td class="tb">{{ customer.FIRST_VISIT | date:'y-m-d'}}</td>
-                                <td class="tb">{{ customer.LAST_VISIT | date:'y-m-d'}}</td>
-                                <td class="tb">{{ customer.VISIT_CNT }}</td>
-                                <td class="tb">{{ customer.CUSTOMER_RATING }}</td>
-                            </tr>
-                            {% endfor %}
-                        </tbody>
-                        
-                        
-                    </table>
-                  
-                    <div id="page_bar">
-                        <ul>
-                            {% if page_obj.has_previous %}
-                            <li><a href="?page={{ page_obj.previous_page_number }}">&lt;</a></li>
-                            {% endif %}
-    
-                            {% for page_number in page_obj.paginator.page_range %}
-                            {% if page_number >= page_obj.number|add:-5 and page_number <= page_obj.number|add:5 %}
-    
-                            {% if page_number == page_obj.number %}
-                                <li><a style="color:red;">{{ page_number }}</a></li>
-                            {% else %}
-                            <li><a style="color:black;" href="?page={{ page_number }}">{{ page_number }}</a></li>
-                            {% endif %} 
-    
-                            {% endif %}
-                            {% endfor %}
-    
-                            {% if page_obj.has_next %}
-                            <li><a href="?page={{ page_obj.next_page_number }}">&gt;</a></li>
-                            {% endif %}
-                        </ul>
-                        
-                    </div>
+                <div class="search-row">
+                    <div>주소: <input type="text" class="input-search" name="search_addr"/></div>
+                </div>
+                
+                <div class="search-row">
+                    <div>방문일: <input type="date" class="input-search" name="search_start_visit"/> ~ <input type="date" class="input-search" name="search_end_visit"/></div>
+                    <div>방문 횟수: <input type="number" class="input-search input-number" name="search_start_cnt"/> ~ <input type="number" class="input-search input-number" name="search_end_cnt"/></div>
+                    <button class="btn" onclick="search()">검색</button>
                 </div>
             </div>
-           
             
+            <div id="customer_list">
+                <table id="tb_customer_list">
+                    <thead>
+                        <tr>
+                            <th class="tb tb_name">이름</th>
+                            <th class="tb tb_id">아이디</th>
+                            <th class="tb tb_birth">생년월일</th>
+                            <th class="tb_phone">전화번호</th>
+                            <th class="tb_email">이메일</th>
+                            <th class="tb_addr">주소</th>
+                            <th class="tb">첫방문일</th>
+                            <th class="tb">마지막방문일</th>
+                            <th class="tb">방문횟수</th>
+                            <th class="tb">고객등급</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        {% for customer in page_obj %}
+                        <tr id="tb_row" onclick="location.href='/customer/detail/{{customer.CUSTOMER_ID}}'">
+                            <td class="tb">{{ customer.CUSTOMER_NAME }}</td>
+                            <td class="tb">{{ customer.CUSTOMER_ID }}</td>
+                            <td class="tb">{{ customer.CUSTOMER_BIRTH }}</td>
+                            <td class="tb">{{ customer.CUSTOMER_PHONE }}</td>
+                            <td class="tb">{{ customer.CUSTOMER_EMAIL }}</td>
+                            <td class="tb">{{ customer.CUSTOMER_ADDR }}</td>
+                            <td class="tb">{{ customer.FIRST_VISIT | date:'y-m-d'}}</td>
+                            <td class="tb">{{ customer.LAST_VISIT | date:'y-m-d'}}</td>
+                            <td class="tb">{{ customer.VISIT_CNT }}</td>
+                            <td class="tb">{{ customer.CUSTOMER_RATING.NAME }}</td>
+                        </tr>
+                        {% endfor %}
+                    </tbody>
+                    
+                    
+                </table>
+              
+                <div id="page_bar">
+                    <ul>
+                        {% if page_obj.has_previous %}
+                        <li><a href="?page={{ page_obj.previous_page_number }}">&lt;</a></li>
+                        {% endif %}
+
+                        {% for page_number in page_obj.paginator.page_range %}
+                        {% if page_number >= page_obj.number|add:-5 and page_number <= page_obj.number|add:5 %}
+
+                        {% if page_number == page_obj.number %}
+                            <li><a style="color:red;">{{ page_number }}</a></li>
+                        {% else %}
+                        <li><a style="color:black;" href="?page={{ page_number }}">{{ page_number }}</a></li>
+                        {% endif %} 
+
+                        {% endif %}
+                        {% endfor %}
+
+                        {% if page_obj.has_next %}
+                        <li><a href="?page={{ page_obj.next_page_number }}">&gt;</a></li>
+                        {% endif %}
+                    </ul>
+                    
+                </div>
+            </div>
         </div>
-        
-       
     </div>
     {% endblock %}
 </body>

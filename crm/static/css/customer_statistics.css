@@ -1,0 +1,9 @@
+.pie-chart{
+    width: 500px;
+    height: 500px;
+}
+
+#chart_box{
+    margin-left: 50px;
+    margin-top: 50px;
+}

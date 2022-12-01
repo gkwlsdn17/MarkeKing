@@ -1,11 +1,16 @@
+import json
+from django.http import HttpResponse
 from django.shortcuts import render, redirect
 from django.core.paginator import Paginator
-from django.db.models import Q
+# from django.db.models import Q, Case, When, Value, CharField
+from django.db.models import *
+from django.db.models.functions import Substr
 from ..decorators import login_required
 from ..models import *
 import datetime
 from dateutil.relativedelta import relativedelta
 from django.utils.dateparse import parse_datetime
+
 
 @login_required
 def selectCustomer(request):
@@ -173,7 +178,8 @@ def pageCustomerDetailSearch(request):
     if customer_addr:
         q &= Q(CUSTOMER_ADDR__contains = customer_addr)
     if customer_rating:
-        q &= Q(CUSTOMER_RATING__contains = customer_rating)
+        robj = Rating.objects.get(id = customer_rating)
+        q &= Q(CUSTOMER_RATING = robj)
     if s_visit and e_visit:
         if e_visit < s_visit:
             s_visit , e_visit = e_visit , s_visit
@@ -195,4 +201,50 @@ def pageCustomerDetailSearch(request):
     paginator = Paginator(customer_list, '10')
     page_obj = paginator.page(page)
 
-    return render(request, 'main/customer_detail_search.html', {'page_obj': page_obj})
+    ratings = Rating.objects.all().filter(DISCARD=False)
+
+    content = {'page_obj': page_obj, 'ratings': ratings}
+
+    return render(request, 'main/customer_detail_search.html', content)
+
+@login_required
+def pageStatistics(request):
+    
+    
+    return render(request, 'main/customer_statistics.html')
+
+def chartAge(request):
+    year = datetime.datetime.today().year + 1
+
+    customers = Customer.objects.annotate(
+        birth = Substr('CUSTOMER_BIRTH', 1, 4)
+    ).annotate(
+        age = Case(
+            When(birth__gt=year-10, birth__lte=year, then=Value('0~9')),
+            When(birth__gt=year-20, birth__lte=year-10, then=Value('10~20')),
+            When(birth__gt=year-30, birth__lte=year-20, then=Value('20~30')),
+            When(birth__gt=year-40, birth__lte=year-30, then=Value('30~40')),
+            When(birth__gt=year-50, birth__lte=year-40, then=Value('40~50')),
+            When(birth__gt=year-60, birth__lte=year-50, then=Value('50~60')),
+            When(birth__gt=year-70, birth__lte=year-60, then=Value('60~70')),
+            When(birth__gt=year-80, birth__lte=year-70, then=Value('70~80')),
+            When(birth__gt=year-90, birth__lte=year-80, then=Value('80~90')),
+            When(birth__gt=year-100, birth__lt=year-90, then=Value('90~100')),
+            default=Value('미정'),
+            output_field=CharField()
+        )
+    ).values('age').annotate(cnt=Count('age')).order_by('age')
+
+    keys = []
+    values = []
+
+    for obj in customers:
+        keys.append(obj['age'])
+        values.append(obj['cnt'])
+
+    data = {
+        'keys' : keys,
+        'values' : values
+    }
+
+    return HttpResponse(json.dumps(data, ensure_ascii=False))
