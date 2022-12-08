@@ -32,6 +32,7 @@
             var e_visit = $("input[name=search_end_visit]").val();
             var s_cnt = $("input[name=search_start_cnt]").val();
             var e_cnt = $("input[name=search_end_cnt]").val();
+            var sex = $("select[name=search_sex]").val();
             
             if(isNaN(s_age) || isNaN(e_age)){
                 alert('나이는 숫자로 입력하세요')
@@ -53,6 +54,10 @@
                 return;
             }
 
+            if(sex == 'all'){
+                sex = ''
+            }
+
             param = paramString(param, 'name', name);
             param = paramString(param, 'id', id);
             param = paramString(param, 's_age', s_age);
@@ -67,6 +72,7 @@
             param = paramString(param, 'e_visit', e_visit);
             param = paramString(param, 's_cnt', s_cnt);
             param = paramString(param, 'e_cnt', e_cnt);
+            param = paramString(param, 'sex', sex);
            
             location.href="/customer/search/detail?" + param;
         }
@@ -115,6 +121,14 @@
                 <div class="search-row">
                     <div>방문일: <input type="date" class="input-search" name="search_start_visit"/> ~ <input type="date" class="input-search" name="search_end_visit"/></div>
                     <div>방문 횟수: <input type="number" class="input-search input-number" name="search_start_cnt"/> ~ <input type="number" class="input-search input-number" name="search_end_cnt"/></div>
+                    <div>성별: 
+                        <select name="search_sex">
+                            <option value="all" selected>전체</option>
+                            <option value="1">남</option>
+                            <option value="2">여</option>
+                            <option value="0">미정</option>
+                        </select>
+                    </div>
                     <button class="btn" onclick="search()">검색</button>
                 </div>
             </div>
@@ -126,6 +140,7 @@
                             <th class="tb tb_name">이름</th>
                             <th class="tb tb_id">아이디</th>
                             <th class="tb tb_birth">생년월일</th>
+                            <th class="tb tb_sex">성별</th>
                             <th class="tb_phone">전화번호</th>
                             <th class="tb_email">이메일</th>
                             <th class="tb_addr">주소</th>
@@ -141,6 +156,7 @@
                             <td class="tb">{{ customer.CUSTOMER_NAME }}</td>
                             <td class="tb">{{ customer.CUSTOMER_ID }}</td>
                             <td class="tb">{{ customer.CUSTOMER_BIRTH }}</td>
+                            <td class="tb">{{ customer.sex }}</td>
                             <td class="tb">{{ customer.CUSTOMER_PHONE }}</td>
                             <td class="tb">{{ customer.CUSTOMER_EMAIL }}</td>
                             <td class="tb">{{ customer.CUSTOMER_ADDR }}</td>

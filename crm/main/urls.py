@@ -12,6 +12,7 @@ urlpatterns = [
     path('customer/search/detail', customer_views.pageCustomerDetailSearch, name="customer_detail_search"),
     path('customer/statistics/', customer_views.pageStatistics, name="page_statistics"),
     path('customer/statistics/chart/age/', customer_views.chartAge, name="chart_age"),
+    path('customer/statistics/chart/sex/', customer_views.chartSex, name="chart_sex"),
     path('setup/', setup_views.pageSetup, name="pageSetup"),
     path('setup/insert/rating/', setup_views.insertRating, name="insert_rating"),
     path('setup/delete/<int:id>/', setup_views.deleteRating, name="delete_rating"),

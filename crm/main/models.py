@@ -8,11 +8,13 @@ class Customer(models.Model):
     CUSTOMER_BIRTH = models.CharField(max_length=8)
     CUSTOMER_PHONE = models.CharField(max_length=15)
     CUSTOMER_EMAIL = models.EmailField()
+    CUSTOMER_ZIPCODE = models.CharField(max_length=10, default='')
     CUSTOMER_ADDR = models.CharField(max_length=300)
     FIRST_VISIT = models.DateTimeField(auto_now_add=True)
     LAST_VISIT = models.DateTimeField(auto_now=False)
     VISIT_CNT = models.IntegerField(default=0)
     CUSTOMER_RATING = models.ForeignKey('Rating', on_delete=models.DO_NOTHING, default=0)
+    CUSTOMER_SEX = models.IntegerField(default=0)
     CRTIME = models.DateTimeField(auto_now=True)
     DISCARD = models.BooleanField(default=False)
 

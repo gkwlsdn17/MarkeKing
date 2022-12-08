@@ -14,46 +14,65 @@ from django.utils.dateparse import parse_datetime
 
 @login_required
 def selectCustomer(request):
+    try:
+            
+        q = Q()
+        search_all = request.GET.get('all', None)
+        customer_name = request.GET.get('name', None)
+        customer_id = request.GET.get('id', None)
+        customer_birth = request.GET.get('birth', None)
+        customer_phone = request.GET.get('phone', None)
+        customer_email = request.GET.get('email', None)
+        customer_addr = request.GET.get('addr', None)
+        customer_rating = request.GET.get('rating', None)
+        customer_sex = request.GET.get('sex', None)
 
-    q = Q()
-    search_all = request.GET.get('all', None)
-    customer_name = request.GET.get('name', None)
-    customer_id = request.GET.get('id', None)
-    customer_birth = request.GET.get('birth', None)
-    customer_phone = request.GET.get('phone', None)
-    customer_email = request.GET.get('email', None)
-    customer_addr = request.GET.get('addr', None)
-    customer_rating = request.GET.get('rating', None)
+        if search_all:
+            q |= Q(CUSTOMER_NAME__contains = search_all)
+            q |= Q(CUSTOMER_ID__contains = search_all)
+            q |= Q(CUSTOMER_BIRTH__contains = search_all)
+            q |= Q(CUSTOMER_PHONE__contains = search_all)
+            q |= Q(CUSTOMER_EMAIL__contains = search_all)
+            q |= Q(CUSTOMER_ADDR__contains = search_all)
+            q |= Q(CUSTOMER_RATING__contains = search_all)
+        if customer_name:
+            q &= Q(CUSTOMER_NAME__contains = customer_name)
+        if customer_id:
+            q &= Q(CUSTOMER_ID__contains = customer_id)
+        if customer_birth:
+            q &= Q(CUSTOMER_BIRTH__contains = customer_birth)
+        if customer_phone:
+            q &= Q(CUSTOMER_PHONE__contains = customer_phone)
+        if customer_email:
+            q &= Q(CUSTOMER_EMAIL__contains = customer_email)
+        if customer_addr:
+            q &= Q(CUSTOMER_ADDR__contains = customer_addr)
+        if customer_rating:
+            q &= Q(CUSTOMER_RATING__NAME__icontains = customer_rating)
+        if customer_sex:
+            if customer_sex == '남':
+                q &= Q(CUSTOMER_SEX = 1)
+            elif customer_sex == '여':
+                q &= Q(CUSTOMER_SEX = 2)
+            elif customer_sex == '미정':
+                q &= Q(CUSTOMER_SEX = 0)
 
-    if search_all:
-        q |= Q(CUSTOMER_NAME__contains = search_all)
-        q |= Q(CUSTOMER_ID__contains = search_all)
-        q |= Q(CUSTOMER_BIRTH__contains = search_all)
-        q |= Q(CUSTOMER_PHONE__contains = search_all)
-        q |= Q(CUSTOMER_EMAIL__contains = search_all)
-        q |= Q(CUSTOMER_ADDR__contains = search_all)
-        q |= Q(CUSTOMER_RATING__contains = search_all)
-    if customer_name:
-        q &= Q(CUSTOMER_NAME__contains = customer_name)
-    if customer_id:
-        q &= Q(CUSTOMER_ID__contains = customer_id)
-    if customer_birth:
-        q &= Q(CUSTOMER_BIRTH__contains = customer_birth)
-    if customer_phone:
-        q &= Q(CUSTOMER_PHONE__contains = customer_phone)
-    if customer_email:
-        q &= Q(CUSTOMER_EMAIL__contains = customer_email)
-    if customer_addr:
-        q &= Q(CUSTOMER_ADDR__contains = customer_addr)
-    if customer_rating:
-        q &= Q(CUSTOMER_RATING__NAME__icontains = customer_rating)
+        q &= Q(DISCARD = False)
 
-    q &= Q(DISCARD = False)
-
-    customer_list = Customer.objects.all().filter(q) 
-    page = request.GET.get('page', '1')
-    paginator = Paginator(customer_list, '10')
-    page_obj = paginator.page(page)
+        customer_list = Customer.objects.annotate(
+            sex = Case(
+                When(CUSTOMER_SEX=1, then=Value('남')),
+                When(CUSTOMER_SEX=2, then=Value('여')),
+                default=Value('미정'),
+                output_field=CharField()
+            )
+        ).all().filter(q)
+        page = request.GET.get('page', '1')
+        paginator = Paginator(customer_list, '10')
+        page_obj = paginator.page(page)
+    except Exception as e:
+        print(e)
+        page_obj = {}
     
     return render(request, 'main/customer.html', {'page_obj': page_obj})
 
@@ -75,6 +94,7 @@ def insertCustomer(request):
         addr = request.POST.get('customer_addr')
         visit_cnt = request.POST.get('visit_cnt')
         rating = request.POST.get('customer_rating')
+        sex = request.POST.get('customer_sex')
 
         robj = Rating.objects.get(id = rating)
 
@@ -88,7 +108,9 @@ def insertCustomer(request):
             CUSTOMER_ADDR = addr,
             LAST_VISIT = datetime.datetime.now(),
             VISIT_CNT = visit_cnt,
-            CUSTOMER_RATING = robj)
+            CUSTOMER_RATING = robj,
+            CUSTOMER_SEX = sex,
+            )
 
         print(customer)
         customer.save()
@@ -120,6 +142,7 @@ def updateCustomer(request):
         email = request.POST.get('customer_email')
         addr = request.POST.get('customer_addr')
         rating = request.POST.get('customer_rating')
+        sex = request.POST.get('customer_sex')
 
         robj = Rating.objects.get(id = rating)
         customer = Customer.objects.get(CUSTOMER_ID = id)
@@ -129,6 +152,7 @@ def updateCustomer(request):
         customer.CUSTOMER_EMAIL = email
         customer.CUSTOMER_ADDR = addr
         customer.CUSTOMER_RATING = robj
+        customer.CUSTOMER_SEX = sex
         customer.save()
         return redirect("customer_home")
     except:
@@ -160,6 +184,7 @@ def pageCustomerDetailSearch(request):
     e_visit = request.GET.get('e_visit', None)
     s_cnt = request.GET.get('s_cnt', None)
     e_cnt = request.GET.get('e_cnt', None)
+    sex = request.GET.get('sex', None)
 
     if customer_name:
         q &= Q(CUSTOMER_NAME__contains = customer_name)
@@ -191,12 +216,21 @@ def pageCustomerDetailSearch(request):
     if s_cnt and e_cnt:
         if e_cnt < s_cnt:
             s_cnt , e_cnt = e_cnt , s_cnt
-        print(s_cnt, e_cnt)
         q &= Q(VISIT_CNT__range=(s_cnt, e_cnt))
+    if sex:
+        q &= Q(CUSTOMER_SEX = sex)
 
     q &= Q(DISCARD = False)
 
-    customer_list = Customer.objects.all().filter(q) 
+    # customer_list = Customer.objects.all().filter(q) 
+    customer_list = Customer.objects.annotate(
+            sex = Case(
+                When(CUSTOMER_SEX=1, then=Value('남')),
+                When(CUSTOMER_SEX=2, then=Value('여')),
+                default=Value('미정'),
+                output_field=CharField()
+            )
+        ).all().filter(q)
     page = request.GET.get('page', '1')
     paginator = Paginator(customer_list, '10')
     page_obj = paginator.page(page)
@@ -209,7 +243,6 @@ def pageCustomerDetailSearch(request):
 
 @login_required
 def pageStatistics(request):
-    
     
     return render(request, 'main/customer_statistics.html')
 
@@ -240,6 +273,33 @@ def chartAge(request):
 
     for obj in customers:
         keys.append(obj['age'])
+        values.append(obj['cnt'])
+
+    data = {
+        'keys' : keys,
+        'values' : values
+    }
+
+    return HttpResponse(json.dumps(data, ensure_ascii=False))
+
+    
+def chartSex(request):
+    year = datetime.datetime.today().year + 1
+
+    customers = Customer.objects.annotate(
+        sex = Case(
+            When(CUSTOMER_SEX=1, then=Value('남')),
+            When(CUSTOMER_SEX=2, then=Value('여')),
+            default=Value('미정'),
+            output_field=CharField()
+        )
+    ).values('sex').annotate(cnt=Count('sex'))
+
+    keys = []
+    values = []
+
+    for obj in customers:
+        keys.append(obj['sex'])
         values.append(obj['cnt'])
 
     data = {

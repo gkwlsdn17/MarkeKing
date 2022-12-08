@@ -1,6 +1,7 @@
 .pie-chart{
     width: 500px;
     height: 500px;
+    float: left;
 }
 
 #chart_box{

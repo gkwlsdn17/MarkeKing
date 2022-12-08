@@ -44,6 +44,7 @@
                             <th class="tb tb_name">이름</th>
                             <th class="tb tb_id">아이디</th>
                             <th class="tb tb_birth">생년월일</th>
+                            <th class="tb tb_sex">성별</th>
                             <th class="tb_phone">전화번호</th>
                             <th class="tb_email">이메일</th>
                             <th class="tb_addr">주소</th>
@@ -59,6 +60,7 @@
                             <td class="tb">{{ customer.CUSTOMER_NAME }}</td>
                             <td class="tb">{{ customer.CUSTOMER_ID }}</td>
                             <td class="tb">{{ customer.CUSTOMER_BIRTH }}</td>
+                            <td class="tb">{{ customer.sex }}</td>
                             <td class="tb">{{ customer.CUSTOMER_PHONE }}</td>
                             <td class="tb">{{ customer.CUSTOMER_EMAIL }}</td>
                             <td class="tb">{{ customer.CUSTOMER_ADDR }}</td>
@@ -108,6 +110,7 @@
                         <option value="email">이메일</option>
                         <option value="addr">주소</option>
                         <option value="rating">등급</option>
+                        <option value="sex">성별</option>
                     </select>
                     <input type="text" name="keyword">
                     <button class="btn" onclick="search()">검색</button>
