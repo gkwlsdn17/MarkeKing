@@ -1,10 +1,17 @@
 .pie-chart{
     width: 500px;
-    height: 500px;
+    height: 300px;
     float: left;
 }
 
-#chart_box{
+.chart_box{
     margin-left: 50px;
     margin-top: 50px;
+}
+
+.line-chart{
+    width: 500px;
+    height: 300px;
+    clear: left;
+    float: left;
 }

@@ -308,3 +308,26 @@ def chartSex(request):
     }
 
     return HttpResponse(json.dumps(data, ensure_ascii=False))
+
+def chartSignUp(request):
+    today = datetime.datetime.today()
+    start = today + relativedelta(days=-6)
+    
+    dates = Customer.objects.all().filter(FIRST_VISIT__range=(start.strftime('%Y-%m-%d'), (today + relativedelta(days=1)).strftime('%Y-%m-%d'))
+    ).values('FIRST_VISIT').order_by('FIRST_VISIT')
+
+    keys = []
+    values = []
+    for i in range(6, -1, -1):
+        day = datetime.datetime.strftime(today + relativedelta(days=-i), '%Y-%m-%d')
+        date_count = dates.filter(FIRST_VISIT__contains=day).count()
+        keys.append(day)
+        values.append(date_count)
+        
+    data = {
+        'keys' : keys,
+        'values' : values
+    }
+
+
+    return HttpResponse(json.dumps(data, ensure_ascii=False))

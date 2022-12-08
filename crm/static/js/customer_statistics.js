@@ -1,5 +1,6 @@
 getAgeChart();
 getSexChart();
+getSignUpChart();
 
 function getAgeChart(){
     $.ajax({
@@ -80,4 +81,31 @@ function getSexChart(){
             }
         }
     };
+}
+
+function getSignUpChart(){
+    $.ajax({
+        type: 'GET',
+        url: '/customer/statistics/chart/signUp/',
+        success: function (data) {
+            data = JSON.parse(data)
+            var ctx = $("#chart_signUp").get(0).getContext("2d");
+            new Chart(ctx, {
+                type: 'line',
+                data: {
+                    datasets: [{
+                        data: data['values'],
+                        borderColor: 'rgb(75, 192, 192)',
+                        label: '회원가입수',
+                        tension: 0.1,
+                        fill: false
+                    }],
+                    labels: data['keys'],
+
+                }
+                
+            });
+        }
+    });
+    
 }

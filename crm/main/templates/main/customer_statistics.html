@@ -30,7 +30,7 @@
 
     {% block main %}
     <div id="content">
-        <div id="chart_box">
+        <div class="chart_box">
             <div class="pie-chart">
                 <canvas id="chart_age" ></canvas>
             </div>
@@ -38,7 +38,11 @@
                 <canvas id="chart_sex" ></canvas>
             </div>
         </div>
-
+        <div class="chart_box">
+            <div class="line-chart">
+                <canvas id="chart_signUp"></canvas>
+            </div>
+        </div>
     </div>
     {% endblock %}
 </body>
