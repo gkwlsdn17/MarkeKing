@@ -6,7 +6,12 @@ from ..models import *
 def pageSetup(request):
     try:
         ratings = Rating.objects.all().filter(DISCARD=False).order_by('ORDER')
-        content = {'ratings': ratings}
+        goods_types = GoodsType.objects.all().filter(DISCARD=False)
+
+        content = {
+            'ratings': ratings,
+            'goods_types' : goods_types
+        }
     except:
         ratings = []
     return render(request, 'main/setup.html', content)
@@ -49,3 +54,28 @@ def deleteRating(request, id):
     except Exception as e:
         print(e)
     return redirect('pageSetup')
+
+@login_required
+def insertGoodsType(request):
+    try:
+        name = request.GET.get('name',None)
+        obj = GoodsType(
+            NAME = name,
+        )
+        obj.save()
+    except Exception as e:
+        print(e)
+        
+    return redirect('pageSetup')
+
+@login_required
+def deleteGoodsType(request, id):
+    try:
+        obj = GoodsType.objects.get(id = id)
+        obj.DISCARD = True
+        obj.save()
+    except Exception as e:
+        print(e)
+    return redirect('pageSetup')
+
+

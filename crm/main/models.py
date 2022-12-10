@@ -22,3 +22,15 @@ class Rating(models.Model):
     NAME = models.CharField(max_length=20)
     ORDER = models.IntegerField(default=0)
     DISCARD = models.BooleanField(default=False)
+
+class Goods(models.Model):
+    NAME = models.CharField(max_length=200)
+    TYPE = models.ForeignKey('GoodsType', on_delete=models.DO_NOTHING)
+    BARCODE = models.CharField(max_length=100, default='')
+    PRICE = models.IntegerField(default=0)
+    CRTIME = models.DateTimeField(auto_now=True)
+    DISCARD = models.BooleanField(default=False)
+
+class GoodsType(models.Model):
+    NAME = models.CharField(max_length=100)
+    DISCARD = models.BooleanField(default=False)

@@ -37,6 +37,21 @@
             }
         }
 
+        function goods_type_insert(){
+            if($("#goods_type_insert").html() == '추가'){
+                name = $("input[name=goods_type_name]").val();
+                if(name == ''){
+                    return;
+                }
+                $("input[name=goods_type_name]").attr('type','hidden');
+                $("#goods_type_insert").html('+');
+                location.href = '/setup/insert/goods_type?name='+name;
+            }
+            else{
+                $("input[name=goods_type_name]").attr('type','text');
+                $("#goods_type_insert").html('추가');
+            }
+        }
     </script>
 
 </head>
@@ -49,8 +64,8 @@
         <div id="content_menu">
             <div>
                 <ul>
-                    <li><a href="#rating">등급 수정</a></li>
-                    <li><a href="#">2번수정</a></li>
+                    <li><a href="#rating">등급관리</a></li>
+                    <li><a href="#">상품타입관리</a></li>
                     <li><a>3번수정</a></li>
                     <li><a>4번메뉴</a></li>
                 </ul>
@@ -59,12 +74,12 @@
         <div id="content">
             <div id="rating">
                 <div id="rating_top">
-                    <a name="rating">등급 수정</a>
+                    <a name="rating">등급관리</a>
                     <input id="rating_name" type="hidden" name="rating_name" placeholder="등급"/>
                     <input id="rating_order" type="hidden" name="rating_order" placeholder="순서"/>
                     <button id="rating_insert" class="btn" style="float:right" onclick="rating_insert()">+</button>
                 </div>
-                <table id="tb_rating">
+                <table id="tb_rating" class="setup_table">
                     <thead>
                         <tr>
                             <th class="tb">등급</th>
@@ -77,14 +92,37 @@
                         <tr>
                             <td class="tb">{{ val.NAME }}</td>
                             <td class="tb">{{ val.ORDER }}</td>
-                            <td class="tb"><button onclick="location.href='/setup/delete/{{val.id}}'">삭제</button></td>
+                            <td class="tb"><button onclick="location.href='/setup/delete/rating/{{val.id}}'">삭제</button></td>
                         </tr>
                         {% endfor %}
                     </tbody>
                     
                 </table>
             </div>
-            
+            <div id="goods_type">
+                <div id="goods_type_top">
+                    <a name="goods_type">상품타입관리</a>
+                    <input id="goods_type_name" type="hidden" name="goods_type_name" placeholder="상품타입명"/>
+                    <button id="goods_type_insert" class="btn" style="float:right" onclick="goods_type_insert()">+</button>
+                </div>
+                <table id="tb_goods_type" class="setup_table">
+                    <thead>
+                        <tr>
+                            <th class="tb">상품타입</th>
+                            <th class="tb">삭제</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        {% for val in goods_types %}
+                        <tr>
+                            <td class="tb">{{ val.NAME }}</td>
+                            <td class="tb"><button onclick="location.href='/setup/delete/goods_type/{{val.id}}'">삭제</button></td>
+                        </tr>
+                        {% endfor %}
+                    </tbody>
+                    
+                </table>
+            </div>
         </div>
         
     </div>
