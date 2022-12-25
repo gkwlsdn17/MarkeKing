@@ -6,7 +6,6 @@
 
 #content_menu{
     width: 10%;
-    /* height: 780px; */
     height: 900px;
     float: left;
     border: 1px solid black;
@@ -24,17 +23,4 @@
     height: 100%;
 }
 
-.customer-input-div{
-    margin-top: 80px;
-    margin-left: 30%;
-    width: 500px;
-}
 
-.customer-input-div > form > div{ margin-top: 10px; }
-.customer-input-div> form > div > select{  width: 100%; }
-.customer-input-div> form > div > input{ width: 100%; }
-.customer-input-div > div{
-    margin-top:30px;
-    overflow: hidden;
-    float: right;
-}

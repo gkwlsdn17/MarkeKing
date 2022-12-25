@@ -1,0 +1,21 @@
+
+#insert_goods{
+    margin: 20px;
+    float: right;
+}
+.tb_type{ width: 15%; }
+.tb_barcode{ width: 15%; }
+.tb_price{ width: 15%; }
+.search-bar{
+    clear: right;
+    float: left;
+    margin: 30px auto;
+}
+
+#search_combo{
+    margin-left: 20px;
+}
+#goods_list{
+    clear: both;
+}
+

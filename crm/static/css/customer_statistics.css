@@ -1,17 +1,27 @@
 .pie-chart{
     width: 500px;
-    height: 300px;
+    height: 400px;
     float: left;
 }
 
 .chart_box{
-    margin-left: 50px;
-    margin-top: 50px;
+    /* margin-left: 10%; */
+    /* margin-top: 100px; */
+    padding: 50px 10%;
+    margin: 50px auto;
 }
 
 .line-chart{
     width: 500px;
-    height: 300px;
-    clear: left;
+    height: 400px;
+}
+
+.chart{
+    margin: 20px;
     float: left;
+}
+
+.chart-title{
+    text-align: center;
+    margin: 20px auto;
 }

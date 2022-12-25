@@ -31,17 +31,24 @@
     {% block main %}
     <div id="content">
         <div class="chart_box">
-            <div class="pie-chart">
-                <canvas id="chart_age" ></canvas>
+            <div class="chart">
+                <div class="chart-title">연령별 분포도</div>
+                <div class="pie-chart">
+                    <canvas id="chart_age" ></canvas>
+                </div>
             </div>
-            <div class="pie-chart">
-                <canvas id="chart_sex" ></canvas>
+            <div class="chart">
+                <div class="chart-title">성별 분포도</div>
+                <div class="pie-chart">
+                    <canvas id="chart_sex" ></canvas>
+                </div>
             </div>
-        </div>
-        <div class="chart_box">
-            <div class="line-chart">
-                <canvas id="chart_signUp"></canvas>
+            <div class="chart">
+                <div class="line-chart">
+                    <canvas id="chart_signUp"></canvas>
+                </div>
             </div>
+            
         </div>
     </div>
     {% endblock %}

@@ -1,1 +1,109 @@
-굿즈
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>MarkeKing</title>
+    <!-- Latest compiled and minified CSS -->
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@4.6.1/dist/css/bootstrap.min.css">
+    <!-- jQuery library -->
+    <script src="https://cdn.jsdelivr.net/npm/jquery@3.6.0/dist/jquery.slim.min.js"></script>
+    <!-- Popper JS -->
+    <script src="https://cdn.jsdelivr.net/npm/popper.js@1.16.1/dist/umd/popper.min.js"></script>
+    <!-- Latest compiled JavaScript -->
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@4.6.1/dist/js/bootstrap.bundle.min.js"></script>
+
+    <link rel="stylesheet" type="text/css" href="/static/css/goods_common.css">
+    <link rel="stylesheet" type="text/css" href="/static/css/goods_main.css">
+    <script>
+        function search() {
+            var condition = $("select[name=condition]").val();
+            var keyword = $("input[name=keyword]").val();
+            location.href = "/goods?" + condition + "=" + keyword;
+        }
+    </script>
+</head>
+
+<body>
+
+    {% extends 'main/goods_base_side.html' %}
+    {% block main %}
+
+    <div id="content">
+        <div id="top_menu">
+            
+        </div>
+        <a href="#" id="insert_goods" class="btn">상품추가</a>
+        <div class="search-bar">
+            {% for type in types %}
+            <button class="btn type-btn">{{type.NAME}}</button>
+            {% endfor %}
+            <select name="condition" id="search_combo">
+                <option value="all">==선택==</option>
+                <option value="name">상품명</option>
+                <option value="type">상품타입</option>
+                <option value="barcode">바코드</option>
+                <option value="price">가격</option>
+            </select>
+            <input type="text" name="keyword">
+            <button class="btn" onclick="search()">검색</button>
+        </div>
+        <div id="goods_list">
+            <table id="tb_goods_list" class="table">
+                <thead>
+                    <tr>
+                        <th class="tb_name">상품명</th>
+                        <th class="tb_type">상품타입</th>
+                        <th class="tb_barcode">바코드</th>
+                        <th class="tb_price">가격</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {% for goods in page_obj %}
+                    <tr id="tb_row" onclick="location.href='detail/{{customer.CUSTOMER_ID}}'">
+                        <td class="td tb_name">{{ goods.NAME }}</td>
+                        <td class="td tb_type">{{ goods.TYPE }}</td>
+                        <td class="td tb_barcode">{{ goods.BARCODE }}</td>
+                        <td class="td tb_price">{{ goods.PRICE }}</td>
+                    </tr>
+                    {% endfor %}
+                </tbody>
+
+
+            </table>
+
+            <div id="page_bar" class="page-bar">
+                <ul>
+                    {% if page_obj.has_previous %}
+                    <li><a href="?page={{ page_obj.previous_page_number }}">&lt;</a></li>
+                    {% endif %}
+
+                    {% for page_number in page_obj.paginator.page_range %}
+                    {% if page_number >= page_obj.number|add:-5 and page_number <= page_obj.number|add:5 %}
+
+                    {% if page_number == page_obj.number %}
+                        <li><a style="color:red;">{{ page_number }}</a></li>
+                    {% else %}
+                    <li><a style="color:black;" href="?page={{ page_number }}">{{ page_number }}</a></li>
+                    {% endif %} 
+
+                    {% endif %}
+                    {% endfor %}
+
+                    {% if page_obj.has_next %}
+                    <li><a href="?page={{ page_obj.next_page_number }}">&gt;</a></li>
+                    {% endif %}
+                </ul>
+
+            </div>
+
+        </div>
+
+    </div>
+    {% endblock %}
+  
+</body>
+
+</html>
