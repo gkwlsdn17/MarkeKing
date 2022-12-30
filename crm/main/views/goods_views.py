@@ -51,5 +51,85 @@ def pageGoodsMain(request):
     return render(request, 'main/goods_main.html', {'page_obj': page_obj, 'types': types})
 
 @login_required
+def pageInsertGoods(request):
+    context = {}
+    try:
+        types = GoodsType.objects.all().filter(DISCARD=False)
+        context['types'] = types
+    except Exception as e:
+        print(e)
+
+    return render(request, 'main/goods_insert.html', {'types': types})
+
+@login_required
 def insertGoods(request):
-    return render(request, 'goods_insert.html')
+    
+    try:
+        name = request.POST.get('goods_name',None)
+        type = request.POST.get('goods_type',None)
+        barcode = request.POST.get('goods_barcode',None)
+        price = request.POST.get('goods_price',None)
+        
+        goods_type = GoodsType.objects.get(id = type)
+
+        goods = Goods(
+            NAME = name,
+            TYPE = goods_type,
+            BARCODE = barcode,
+            PRICE = price
+        )
+
+        goods.save()
+        return redirect('pageGoodsMain')
+    
+    except Exception as e:
+        print(e)
+        return render(request, 'main/goods_insert.html')
+    
+@login_required
+def goodsDetail(request , goods_id):
+    try:
+        if goods_id is None:
+            return redirect("pageGoodsMain")
+
+        goods = Goods.objects.get(id = goods_id)
+        goods_type = GoodsType.objects.all().filter(DISCARD=False)
+        context = {'goods': goods, 'types': goods_type}
+        return render(request, 'main/goods_detail.html', context)
+    except Exception as e:
+        print(e)
+        return redirect('pageGoodsMain')
+
+@login_required
+def updateGoods(request):
+    try:
+        id = request.POST.get('goods_id')
+        name = request.POST.get('goods_name')
+        type = request.POST.get('goods_type')
+        barcode = request.POST.get('goods_barcode')
+        goods_price = request.POST.get('goods_price')
+
+        goodsType = GoodsType.objects.get(id= type)
+
+        goods = Goods.objects.get(id = id)
+        goods.NAME = name
+        goods.TYPE = goodsType
+        goods.BARCODE = barcode
+        goods.PRICE = goods_price
+
+        goods.save()
+        return redirect('pageGoodsMain')
+
+    except Exception as e:
+        print(e)
+        return redirect('pageGoodsMain')
+
+@login_required
+def deleteGoods(request, gid):
+    try:
+        goods = Goods.objects.get(id = gid)
+        goods.delete()
+        return redirect('pageGoodsMain')
+    except Exception as e:
+        print(e)
+        return redirect('pageGoodsMain')

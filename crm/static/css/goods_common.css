@@ -23,4 +23,16 @@
     height: 100%;
 }
 
+.goods-input-div{
+    margin: 80px auto;
+    width: 500px;
+}
 
+.goods-input-div > form > div{ margin-top: 10px; }
+.goods-input-div> form > div > select{  width: 100%; }
+.goods-input-div> form > div > input{ width: 100%; }
+.goods-input-div > div{
+    margin-top:30px;
+    overflow: hidden;
+    float: right;
+}

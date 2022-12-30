@@ -3,19 +3,28 @@
     margin: 20px;
     float: right;
 }
+
+#search_bar{
+    clear: right;
+    float: left;
+    margin: 30px;
+    height: 50px;
+    overflow: hidden;
+}
+.type-btn{
+    margin-left: 10px;
+}
+#search_combo{
+    margin-left: 20px;
+    height: 30px;
+    margin-top: 5px;
+}
+#goods_list{ clear: both; }
+
+.left{ float: left; }
+
+#search_text{ margin: 5px 10px; }
+
 .tb_type{ width: 15%; }
 .tb_barcode{ width: 15%; }
 .tb_price{ width: 15%; }
-.search-bar{
-    clear: right;
-    float: left;
-    margin: 30px auto;
-}
-
-#search_combo{
-    margin-left: 20px;
-}
-#goods_list{
-    clear: both;
-}
-

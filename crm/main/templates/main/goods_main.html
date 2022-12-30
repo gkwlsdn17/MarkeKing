@@ -32,23 +32,22 @@
     {% block main %}
 
     <div id="content">
-        <div id="top_menu">
-            
+        <div>
+            <a href="insert/view/" id="insert_goods" class="btn">상품추가</a>
         </div>
-        <a href="#" id="insert_goods" class="btn">상품추가</a>
-        <div class="search-bar">
+        <div id="search_bar">
             {% for type in types %}
-            <button class="btn type-btn">{{type.NAME}}</button>
+            <button class="btn type-btn left">{{type.NAME}}</button>
             {% endfor %}
-            <select name="condition" id="search_combo">
+            <select name="condition" id="search_combo" class="left">
                 <option value="all">==선택==</option>
                 <option value="name">상품명</option>
                 <option value="type">상품타입</option>
                 <option value="barcode">바코드</option>
                 <option value="price">가격</option>
             </select>
-            <input type="text" name="keyword">
-            <button class="btn" onclick="search()">검색</button>
+            <input type="text" class="left" id="search_text" name="keyword">
+            <button class="btn left" onclick="search()">검색</button>
         </div>
         <div id="goods_list">
             <table id="tb_goods_list" class="table">
@@ -62,9 +61,9 @@
                 </thead>
                 <tbody>
                     {% for goods in page_obj %}
-                    <tr id="tb_row" onclick="location.href='detail/{{customer.CUSTOMER_ID}}'">
+                    <tr class="tb_row" onclick="location.href='detail/{{goods.id}}'">
                         <td class="td tb_name">{{ goods.NAME }}</td>
-                        <td class="td tb_type">{{ goods.TYPE }}</td>
+                        <td class="td tb_type">{{ goods.TYPE.NAME }}</td>
                         <td class="td tb_barcode">{{ goods.BARCODE }}</td>
                         <td class="td tb_price">{{ goods.PRICE }}</td>
                     </tr>
