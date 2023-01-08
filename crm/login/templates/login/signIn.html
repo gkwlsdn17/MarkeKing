@@ -1,0 +1,81 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>MarkeKing</title>
+    <!-- Latest compiled and minified CSS -->
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@4.6.1/dist/css/bootstrap.min.css">
+    <!-- jQuery library -->
+    <script src="https://cdn.jsdelivr.net/npm/jquery@3.6.0/dist/jquery.slim.min.js"></script>
+    <!-- Popper JS -->
+    <script src="https://cdn.jsdelivr.net/npm/popper.js@1.16.1/dist/umd/popper.min.js"></script>
+    <!-- Latest compiled JavaScript -->
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@4.6.1/dist/js/bootstrap.bundle.min.js"></script>
+
+    <link rel="stylesheet" type="text/css" href="/static/css/signIn.css">
+    <script>
+        function check(){
+            var id = $('input[name=user_id]').val()
+            var pw = $('input[name=user_pw]').val()
+            var name = $('input[name=user_name]').val()
+            var birth = $('input[name=user_birth]').val()
+            var phone = $('input[name=user_phone]').val()
+            var email = $('input[name=user_email]').val()
+
+            if(id.trim() == ''){
+                alert('아이디를 입력해주세요.')
+                return false;
+            }
+            else if(pw.trim() == ''){
+                alert('비밀번호를 입력해주세요.')
+                return false;
+            }
+            else if(name.trim() == ''){
+                alert('이름을 입력해주세요.')
+                return false;
+            }
+            else if(birth.trim() == ''){
+                alert('생년월일을 입력해주세요')
+                return false;
+            }
+            else if(phone.trim() == ''){
+                alert('핸드폰번호를 입력해주세요.')
+                return false;
+            }
+            else if(email.trim() == ''){
+                alert('이메일을 입력해주세요.')
+                return false;
+            }
+
+            if(isNaN(birth)){
+                alert("생년월일을 올바르게 입력해주세요.")
+                return false;
+            }
+
+            return true;
+        }
+    </script>
+    
+</head>
+<body>
+    <div id="border">
+        <div id="header">
+            <h1>회원가입</h1>
+        </div>
+        <div id="container">
+            <form action="./submit" method="POST" onsubmit="return check()">{% csrf_token %}
+                <div class="row">아이디:<input type="text" name="user_id"></div>
+                <div class="row">비밀번호:<input type="password" name="user_pw"></div>
+                <div class="row">이름:<input type="text" name="user_name"></div>
+                <div class="row">생년월일:<input type="text" alt="19940614" name="user_birth"></div>
+                <div class="row">핸드폰:<input type="text" name="user_phone"></div>
+                <div class="row">이메일:<input type="email" name="user_email"></div>
+                <button type="submit">가입</button>
+            </form>
+        </div>
+    </div>
+    
+</body>
+</html>

@@ -10,12 +10,13 @@ from ..models import *
 import datetime
 from dateutil.relativedelta import relativedelta
 from django.utils.dateparse import parse_datetime
-
+import logging
+logger = logging.getLogger('customer')
 
 @login_required
 def selectCustomer(request):
+    search = {}
     try:
-            
         q = Q()
         search_all = request.GET.get('all', None)
         customer_name = request.GET.get('name', None)
@@ -34,21 +35,37 @@ def selectCustomer(request):
             q |= Q(CUSTOMER_PHONE__contains = search_all)
             q |= Q(CUSTOMER_EMAIL__contains = search_all)
             q |= Q(CUSTOMER_ADDR__contains = search_all)
-            q |= Q(CUSTOMER_RATING__contains = search_all)
+            q |= Q(CUSTOMER_RATING__NAME__icontains = search_all)
+            search['condition'] = 'all'
+            search['keyword'] = search_all
         if customer_name:
             q &= Q(CUSTOMER_NAME__contains = customer_name)
+            search['condition'] = 'name'
+            search['keyword'] = customer_name
         if customer_id:
             q &= Q(CUSTOMER_ID__contains = customer_id)
+            search['condition'] = 'id'
+            search['keyword'] = customer_id
         if customer_birth:
             q &= Q(CUSTOMER_BIRTH__contains = customer_birth)
+            search['condition'] = 'birth'
+            search['keyword'] = customer_birth
         if customer_phone:
             q &= Q(CUSTOMER_PHONE__contains = customer_phone)
+            search['condition'] = 'phone'
+            search['keyword'] = customer_phone
         if customer_email:
             q &= Q(CUSTOMER_EMAIL__contains = customer_email)
+            search['condition'] = 'email'
+            search['keyword'] = customer_email
         if customer_addr:
             q &= Q(CUSTOMER_ADDR__contains = customer_addr)
+            search['condition'] = 'addr'
+            search['keyword'] = customer_addr
         if customer_rating:
             q &= Q(CUSTOMER_RATING__NAME__icontains = customer_rating)
+            search['condition'] = 'rating'
+            search['keyword'] = customer_rating
         if customer_sex:
             if customer_sex == '남':
                 q &= Q(CUSTOMER_SEX = 1)
@@ -56,6 +73,8 @@ def selectCustomer(request):
                 q &= Q(CUSTOMER_SEX = 2)
             elif customer_sex == '미정':
                 q &= Q(CUSTOMER_SEX = 0)
+            search['condition'] = 'sex'
+            search['keyword'] = customer_sex
 
         q &= Q(DISCARD = False)
 
@@ -71,10 +90,10 @@ def selectCustomer(request):
         paginator = Paginator(customer_list, '10')
         page_obj = paginator.page(page)
     except Exception as e:
-        print(e)
+        logger.error(e)
         page_obj = {}
     
-    return render(request, 'main/customer.html', {'page_obj': page_obj})
+    return render(request, 'main/customer.html', {'page_obj': page_obj, 'search': search})
 
 @login_required
 def pageInsertCustomer(request):
@@ -114,8 +133,9 @@ def insertCustomer(request):
 
         print(customer)
         customer.save()
+        logger.info(f'InsertCustomer - {id}({name}) Save')
     except Exception as e:
-        print(e)
+        logger.error(e)
     
     return redirect("customer_home")
 
@@ -129,7 +149,8 @@ def pageCustomerDetail(request, customer_id):
         ratings = Rating.objects.all().filter(DISCARD = False)
         content = {'customer': customer, 'ratings': ratings}
         return render(request, 'main/customer_detail.html', content)
-    except:
+    except Exception as e:
+        logger.error(e)
         return redirect("customer_home")
 
 @login_required
@@ -154,8 +175,10 @@ def updateCustomer(request):
         customer.CUSTOMER_RATING = robj
         customer.CUSTOMER_SEX = sex
         customer.save()
+        logger.info(f'UpdateCustomer - {id} Update')
         return redirect("customer_home")
-    except:
+    except Exception as e:
+        logger.error(e)
         redirect('customer_detail', customer_id=id)
 
 @login_required
@@ -164,80 +187,105 @@ def deleteCustomer(request, cid):
         customer = Customer.objects.get(id = cid)
         customer.DISCARD = True
         customer.save()
+        logger.info(f'DeleteCustomer - {cid} Delete')
         return redirect("customer_home")
-    except:
-       return redirect('customer_detail', customer_id=cid)
+    except Exception as e:
+        logger.error(e)
+        return redirect('customer_detail', customer_id=cid)
     
 @login_required
 def pageCustomerDetailSearch(request):
+    search = {}
+    try:
+        q = Q()
+        customer_name = request.GET.get('name', None)
+        customer_id = request.GET.get('id', None)
+        s_age = request.GET.get('s_age', None)
+        e_age = request.GET.get('e_age', None)
+        customer_phone = request.GET.get('phone', None)
+        customer_email = request.GET.get('email', None)
+        customer_addr = request.GET.get('addr', None)
+        customer_rating = request.GET.get('rating', None)
+        s_visit = request.GET.get('s_visit', None)
+        e_visit = request.GET.get('e_visit', None)
+        s_cnt = request.GET.get('s_cnt', None)
+        e_cnt = request.GET.get('e_cnt', None)
+        sex = request.GET.get('sex', None)
 
-    q = Q()
-    customer_name = request.GET.get('name', None)
-    customer_id = request.GET.get('id', None)
-    s_age = request.GET.get('s_age', None)
-    e_age = request.GET.get('e_age', None)
-    customer_phone = request.GET.get('phone', None)
-    customer_email = request.GET.get('email', None)
-    customer_addr = request.GET.get('addr', None)
-    customer_rating = request.GET.get('rating', None)
-    s_visit = request.GET.get('s_visit', None)
-    e_visit = request.GET.get('e_visit', None)
-    s_cnt = request.GET.get('s_cnt', None)
-    e_cnt = request.GET.get('e_cnt', None)
-    sex = request.GET.get('sex', None)
+        if customer_name:
+            q &= Q(CUSTOMER_NAME__contains = customer_name)
+            search['name'] = customer_name
+        if customer_id:
+            q &= Q(CUSTOMER_ID__contains = customer_id)
+            search['id'] = customer_id
+        if s_age and e_age:
+            s_year = (datetime.datetime.now() - relativedelta(years=int(s_age)-1)).year
+            e_year = (datetime.datetime.now() - relativedelta(years=int(e_age)-1)).year
+            if e_year < s_year:
+                s_year , e_year = e_year , s_year
+            q &= Q(CUSTOMER_BIRTH__range=(f'{s_year}0101', f'{e_year+1}0101'))
+            search['s_age'] = s_age
+            search['e_age'] = e_age
+        if customer_phone:
+            q &= Q(CUSTOMER_PHONE__contains = customer_phone)
+            search['phone'] = customer_phone
+        if customer_email:
+            q &= Q(CUSTOMER_EMAIL__contains = customer_email)
+            search['email'] = customer_email
+        if customer_addr:
+            q &= Q(CUSTOMER_ADDR__contains = customer_addr)
+            search['addr'] = customer_addr
+        if customer_rating:
+            robj = Rating.objects.get(id = customer_rating)
+            q &= Q(CUSTOMER_RATING = robj)
+            search['rating'] = customer_rating
+        if s_visit and e_visit:
+            search['s_visit'] = s_visit
+            search['e_visit'] = e_visit
+            if e_visit < s_visit:
+                s_visit , e_visit = e_visit , s_visit
+            
+            s_visit = parse_datetime(s_visit)
+            e_visit = parse_datetime(e_visit)
+            e_visit = e_visit + relativedelta(days=1)
+            q &= Q(LAST_VISIT__range=(s_visit,e_visit))
+            
+        if s_cnt and e_cnt:
+            if e_cnt < s_cnt:
+                s_cnt , e_cnt = e_cnt , s_cnt
+            q &= Q(VISIT_CNT__range=(s_cnt, e_cnt))
+            search['s_cnt'] = s_cnt
+            search['e_cnt'] = e_cnt
+        if sex:
+            q &= Q(CUSTOMER_SEX = sex)
+            search['sex'] = sex
 
-    if customer_name:
-        q &= Q(CUSTOMER_NAME__contains = customer_name)
-    if customer_id:
-        q &= Q(CUSTOMER_ID__contains = customer_id)
-    if s_age and e_age:
-        s_year = (datetime.datetime.now() - relativedelta(years=int(s_age)-1)).year
-        e_year = (datetime.datetime.now() - relativedelta(years=int(e_age)-1)).year
-        if e_year < s_year:
-            s_year , e_year = e_year , s_year
-        q &= Q(CUSTOMER_BIRTH__range=(f'{s_year}0101', f'{e_year+1}0101'))
-    if customer_phone:
-        q &= Q(CUSTOMER_PHONE__contains = customer_phone)
-    if customer_email:
-        q &= Q(CUSTOMER_EMAIL__contains = customer_email)
-    if customer_addr:
-        q &= Q(CUSTOMER_ADDR__contains = customer_addr)
-    if customer_rating:
-        robj = Rating.objects.get(id = customer_rating)
-        q &= Q(CUSTOMER_RATING = robj)
-    if s_visit and e_visit:
-        if e_visit < s_visit:
-            s_visit , e_visit = e_visit , s_visit
-        
-        s_visit = parse_datetime(s_visit)
-        e_visit = parse_datetime(e_visit)
-        e_visit = e_visit + relativedelta(days=1)
-        q &= Q(LAST_VISIT__range=(s_visit,e_visit))
-    if s_cnt and e_cnt:
-        if e_cnt < s_cnt:
-            s_cnt , e_cnt = e_cnt , s_cnt
-        q &= Q(VISIT_CNT__range=(s_cnt, e_cnt))
-    if sex:
-        q &= Q(CUSTOMER_SEX = sex)
+        q &= Q(DISCARD = False)
 
-    q &= Q(DISCARD = False)
+        # customer_list = Customer.objects.all().filter(q) 
+        customer_list = Customer.objects.annotate(
+                sex = Case(
+                    When(CUSTOMER_SEX=1, then=Value('남')),
+                    When(CUSTOMER_SEX=2, then=Value('여')),
+                    default=Value('미정'),
+                    output_field=CharField()
+                )
+            ).all().filter(q)
+        page = request.GET.get('page', '1')
+        paginator = Paginator(customer_list, '10')
+        page_obj = paginator.page(page)
 
-    # customer_list = Customer.objects.all().filter(q) 
-    customer_list = Customer.objects.annotate(
-            sex = Case(
-                When(CUSTOMER_SEX=1, then=Value('남')),
-                When(CUSTOMER_SEX=2, then=Value('여')),
-                default=Value('미정'),
-                output_field=CharField()
-            )
-        ).all().filter(q)
-    page = request.GET.get('page', '1')
-    paginator = Paginator(customer_list, '10')
-    page_obj = paginator.page(page)
+        ratings = Rating.objects.all().filter(DISCARD=False)
 
-    ratings = Rating.objects.all().filter(DISCARD=False)
+        query = ""
+        if len(search) > 0:
+            for key in search.keys():
+                query += "&" + key + "=" + search[key]
 
-    content = {'page_obj': page_obj, 'ratings': ratings}
+        content = {'page_obj': page_obj, 'ratings': ratings, 'search': search, 'query' : query}
+    except Exception as e:
+        logger.error(e)
+        content = {}
 
     return render(request, 'main/customer_detail_search.html', content)
 

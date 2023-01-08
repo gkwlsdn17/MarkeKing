@@ -41,7 +41,7 @@ INSTALLED_APPS = [
     'login',
 ]
 
-MIDDLEWARE = [
+MIDDLEWARE_CLASSES = [
     'django.middleware.security.SecurityMiddleware',
     'django.contrib.sessions.middleware.SessionMiddleware',
     'django.middleware.common.CommonMiddleware',
@@ -50,6 +50,8 @@ MIDDLEWARE = [
     'django.contrib.messages.middleware.MessageMiddleware',
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
 ]
+
+MIDDLEWARE = MIDDLEWARE_CLASSES
 
 ROOT_URLCONF = 'config.urls'
 
@@ -128,3 +130,88 @@ DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
 TEMPLATE_CONTEXT_PROCESSORS = (
     'django.core.context_processors.request',
 )
+
+LOGGING = {
+    'version': 1,
+    'disable_existing_loggers': False,
+    'filters': {
+        'require_debug_false': {
+            '()': 'django.utils.log.RequireDebugFalse',
+        },
+        'require_debug_true': {
+            '()': 'django.utils.log.RequireDebugTrue',
+        },
+    },
+    'formatters': {
+        'django.server':{
+            '()': 'django.utils.log.ServerFormatter',
+            'format': '[{server_time}] {message}',
+            'style': '{',
+        },
+        'standard': {
+            'format': "[%(asctime)s] %(levelname)s [%(name)s:%(lineno)s] %(message)s",
+            'datefmt': '%Y-%m-%d %H:%M:%S'
+        },
+        'simple':{
+            'format': '%(levelname)s %(message)s'
+        },
+    },
+    'handlers': {
+        'django.server':{
+            'level': 'INFO',
+            'class': 'logging.StreamHandler',
+            'formatter': 'django.server',
+        },
+        'console': {
+            'level': 'INFO',
+            'filters': ['require_debug_true'],
+            'class': 'logging.StreamHandler',
+        },
+        'file': {
+            'level': 'INFO',
+            'encoding': 'utf-8',
+            'class': 'logging.handlers.TimedRotatingFileHandler',
+            'filename': BASE_DIR / 'logs/mysite.log',
+            'when': 'midnight',
+            'formatter': 'standard',
+            'backupCount': 5,
+        },
+    },
+    'loggers': {
+        'django': {
+            'handlers':['console','file'],
+            'propagate': True,
+            'level': 'INFO',
+        },
+        'django.server': {
+            'handlers':['django.server'],
+            'level': 'INFO',
+            'propagate': 'False',
+        },
+        'app': {
+            'handlers': ['console', 'file'],
+            'level': 'DEBUG',
+        },
+        'main': {
+            'handlers': ['console', 'file'],
+            'level': 'INFO',
+        },
+        'login': {
+            'handlers': ['console', 'file'],
+            'level': 'INFO',
+        },
+        'setup': {
+            'handlers': ['console', 'file'],
+            'level': 'INFO',
+        },
+        'goods': {
+            'handlers': ['console', 'file'],
+            'level': 'INFO',
+        },
+        'customer': {
+            'handlers': ['console', 'file'],
+            'level': 'INFO',
+        },
+    }
+
+}

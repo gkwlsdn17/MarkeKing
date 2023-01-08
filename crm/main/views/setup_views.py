@@ -1,6 +1,8 @@
 from django.shortcuts import render, redirect
 from ..decorators import login_required
 from ..models import *
+import logging
+logger = logging.getLogger('setup')
 
 @login_required
 def pageSetup(request):
@@ -26,8 +28,9 @@ def insertRating(request):
             ORDER = order
         )
         obj.save()
+        logger.info(f'Setting Rating - {name} Save')
     except Exception as e:
-        print(e)
+        logger.error(e)
         
     return redirect('pageSetup')
 
@@ -41,8 +44,9 @@ def updateRating(request):
         obj.NAME = name
         obj.ORDER = order
         obj.save()
+        logger.info(f'Setting Rating - {id} Update')
     except Exception as e:
-        print(e)
+        logger.error(e)
     return redirect('pageSetup')
 
 @login_required
@@ -51,8 +55,9 @@ def deleteRating(request, id):
         obj = Rating.objects.get(id = id)
         obj.DISCARD = True
         obj.save()
+        logger.info(f'Setting Rating {id} Delete')
     except Exception as e:
-        print(e)
+        logger.error(e)
     return redirect('pageSetup')
 
 @login_required
@@ -63,8 +68,9 @@ def insertGoodsType(request):
             NAME = name,
         )
         obj.save()
+        logger.info(f'Setting GoodsType - {name} Save')
     except Exception as e:
-        print(e)
+        logger.error(e)
         
     return redirect('pageSetup')
 
@@ -74,8 +80,9 @@ def deleteGoodsType(request, id):
         obj = GoodsType.objects.get(id = id)
         obj.DISCARD = True
         obj.save()
+        logger.info(f'Setting GoodsType - {id} Delete')
     except Exception as e:
-        print(e)
+        logger.error(e)
     return redirect('pageSetup')
 
 

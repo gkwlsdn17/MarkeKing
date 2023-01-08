@@ -23,6 +23,10 @@
             var keyword = $("input[name=keyword]").val();
             location.href = "/goods?" + condition + "=" + keyword;
         }
+
+        function typeSearch(tid){
+            location.href = "/goods?tid="+tid
+        }
     </script>
 </head>
 
@@ -37,7 +41,7 @@
         </div>
         <div id="search_bar">
             {% for type in types %}
-            <button class="btn type-btn left">{{type.NAME}}</button>
+            <button class="btn type-btn left" onclick="typeSearch('{{type.id}}')">{{type.NAME}}</button>
             {% endfor %}
             <select name="condition" id="search_combo" class="left">
                 <option value="all">==선택==</option>

@@ -9,6 +9,8 @@ from ..models import *
 import datetime
 from dateutil.relativedelta import relativedelta
 from django.utils.dateparse import parse_datetime
+import logging
+logger = logging.getLogger('goods')
 
 @login_required
 def pageGoodsMain(request):
@@ -21,6 +23,7 @@ def pageGoodsMain(request):
         type = request.GET.get('type', None)
         barcode = request.GET.get('barcode', None)
         price = request.GET.get('price', None)
+        tid = request.GET.get('tid', None)
 
         if search_all:
             q |= Q(NAME__contains = search_all)
@@ -36,6 +39,8 @@ def pageGoodsMain(request):
             q &= Q(BARCODE__contains = barcode)
         if price:
             q &= Q(PRICE__contains = price)
+        if tid:
+            q &= Q(TYPE = tid)
 
         q &= Q(DISCARD = False)
 
@@ -45,7 +50,7 @@ def pageGoodsMain(request):
         page_obj = paginator.page(page)
 
     except Exception as e:
-        print(e)
+        logger.error(e)
         page_obj = {}
 
     return render(request, 'main/goods_main.html', {'page_obj': page_obj, 'types': types})
@@ -57,7 +62,7 @@ def pageInsertGoods(request):
         types = GoodsType.objects.all().filter(DISCARD=False)
         context['types'] = types
     except Exception as e:
-        print(e)
+        logger.error(e)
 
     return render(request, 'main/goods_insert.html', {'types': types})
 
@@ -80,10 +85,11 @@ def insertGoods(request):
         )
 
         goods.save()
+        logger.info(f'insertGoods - {name} Save')
         return redirect('pageGoodsMain')
     
     except Exception as e:
-        print(e)
+        logger.error(e)
         return render(request, 'main/goods_insert.html')
     
 @login_required
@@ -97,7 +103,7 @@ def goodsDetail(request , goods_id):
         context = {'goods': goods, 'types': goods_type}
         return render(request, 'main/goods_detail.html', context)
     except Exception as e:
-        print(e)
+        logger.error(e)
         return redirect('pageGoodsMain')
 
 @login_required
@@ -118,18 +124,21 @@ def updateGoods(request):
         goods.PRICE = goods_price
 
         goods.save()
+        logger.info(f'UpdateGoods - {id} Update')
         return redirect('pageGoodsMain')
 
     except Exception as e:
-        print(e)
+        logger.error(e)
         return redirect('pageGoodsMain')
 
 @login_required
 def deleteGoods(request, gid):
     try:
         goods = Goods.objects.get(id = gid)
-        goods.delete()
+        goods.DISCARD = True
+        goods.save()
+        logger.info(f'DeleteGoods - {gid} Delete')
         return redirect('pageGoodsMain')
     except Exception as e:
-        print(e)
+        logger.error(e)
         return redirect('pageGoodsMain')

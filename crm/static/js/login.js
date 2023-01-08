@@ -13,3 +13,7 @@ function loginCheck(){
 
     return true;
 }
+
+function signIn(){
+    location.href = '/login/signIn/';
+}

@@ -19,6 +19,7 @@
     <link rel="stylesheet" type="text/css" href="/static/css/customer.css">
 
     <script>
+       
         function search() {
             var condition = $("select[name=condition]").val();
             var keyword = $("input[name=keyword]").val();
@@ -78,7 +79,11 @@
                 <div id="page_bar">
                     <ul>
                         {% if page_obj.has_previous %}
-                        <li><a href="?page={{ page_obj.previous_page_number }}">&lt;</a></li>
+                            {% if search %}
+                                <li><a href="?page={{ page_obj.previous_page_number }}&{{search.condition}}={{search.keyword}}">&lt;</a></li>
+                            {% else %}
+                                <li><a href="?page={{ page_obj.previous_page_number }}">&lt;</a></li>
+                            {% endif %}
                         {% endif %}
 
                         {% for page_number in page_obj.paginator.page_range %}
@@ -87,14 +92,23 @@
                         {% if page_number == page_obj.number %}
                             <li><a style="color:red;">{{ page_number }}</a></li>
                         {% else %}
-                        <li><a style="color:black;" href="?page={{ page_number }}">{{ page_number }}</a></li>
+                            {% if search %}
+                                <li><a style="color:black;" href="?page={{ page_number }}&{{search.condition}}={{search.keyword}}">{{ page_number }}</a></li>    
+                            {% else %}
+                                <li><a style="color:black;" href="?page={{ page_number }}">{{ page_number }}</a></li>
+                            {% endif %}
                         {% endif %} 
 
                         {% endif %}
                         {% endfor %}
 
                         {% if page_obj.has_next %}
-                        <li><a href="?page={{ page_obj.next_page_number }}">&gt;</a></li>
+                            {% if search %}
+                                <li><a href="?page={{ page_obj.next_page_number }}&{{search.condition}}={{search.keyword}}">&gt;</a></li>
+                            {% else %}
+                                <li><a href="?page={{ page_obj.next_page_number }}">&gt;</a></li>
+                            {% endif %}
+                        
                         {% endif %}
                     </ul>
 
@@ -115,6 +129,17 @@
                     <input type="text" name="keyword">
                     <button class="btn" onclick="search()">검색</button>
                 </div>
+                <script>
+                    $(document).ready(function(){
+                       var condition = '{{search.condition}}';
+                       var keyword = '{{search.keyword}}';
+                       if(condition != ''){
+                        $("select[name=condition]").val(condition).prop("selected", true);
+                        $("input[name=keyword]").attr('value',keyword);
+                       }
+                       
+                   });
+               </script>
             </div>
         </div>
 
