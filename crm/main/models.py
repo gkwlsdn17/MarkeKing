@@ -37,17 +37,25 @@ class GoodsType(models.Model):
 
 class Order(models.Model):
     CUSTOMER_NO = models.ForeignKey('Customer', on_delete=models.DO_NOTHING)
+    ORDER_DATE = models.CharField(max_length=100, default='')
+    TOTAL_AMOUNT = models.IntegerField(default=0)
+    MEMO = models.CharField(max_length=1024, default='')
+    CRTIME = models.DateTimeField(auto_now=True)
+    DISCARD = models.BooleanField(default=False)
+
+class Item(models.Model):
+    ORDER_NO = models.ForeignKey('Order', on_delete=models.DO_NOTHING)
     GOODS_NO = models.ForeignKey('Goods', on_delete=models.DO_NOTHING)
     GOODS_NAME = models.CharField(max_length=200)
     GOODS_COUNT = models.IntegerField(default=0)
     PRICE = models.IntegerField(default=0)
     TOTAL_AMOUNT = models.IntegerField(default=0)
-    CRTIME = models.DateTimeField(auto_now=True)
-    DISCARD = models.BooleanField(default=False)
 
 class Delivery(models.Model):
-    ORDER_NO = models.ForeignKey('Delivery', on_delete=models.DO_NOTHING, default=0)
+    ORDER_NO = models.ForeignKey('Order', on_delete=models.DO_NOTHING, default=0)
     CUSTOMER_NO = models.ForeignKey('Customer', on_delete=models.DO_NOTHING)
+    DELIVERY_DATE = models.CharField(max_length=100, default='')
+    ARRIVAL_DATE = models.CharField(max_length=100, default='')
     DELIVERY_NAME = models.CharField(max_length=200)
     DELIVERY_ADDR = models.CharField(max_length=1024)
     DELIVERY_PHONE = models.CharField(max_length=100)

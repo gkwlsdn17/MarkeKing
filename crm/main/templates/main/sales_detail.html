@@ -1,0 +1,48 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>MarkeKing</title>
+    <!-- Latest compiled and minified CSS -->
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@4.6.1/dist/css/bootstrap.min.css">
+    <!-- jQuery library -->
+    <script src="https://cdn.jsdelivr.net/npm/jquery@3.6.0/dist/jquery.slim.min.js"></script>
+    <!-- Popper JS -->
+    <script src="https://cdn.jsdelivr.net/npm/popper.js@1.16.1/dist/umd/popper.min.js"></script>
+    <!-- Latest compiled JavaScript -->
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@4.6.1/dist/js/bootstrap.bundle.min.js"></script>
+
+</head>
+<body>
+    {% extends 'main/sales_base_side.html' %}
+    {% block main %}
+
+    <div id="content">
+        <div>{{order.id}}</div>
+        <div>{{order.ORDER_DATE}}</div>
+        <div>{{order.MEMO}}</div>
+
+        <div>주문 내역</div>
+        {% for item in items %}
+        <div>{{item.GOODS_NAME}}</div>
+        <div>{{item.GOODS_COUNT}}</div>
+        <div>{{item.PRICE}}</div>
+        <div>{{item.TOTAL_AMOUNT}}</div>
+        {% endfor %}
+
+        <div>배송 정보</div>
+        <div>{{delivery.DELIVERY_DATE}}</div>
+        <div>{{delivery.ARRIVAL_DATE}}</div>
+        <div>{{delivery.DELIVERY_NAME}}</div>
+        <div>{{delivery.DELIVERY_ADDR}}</div>
+        <div>{{delivery.DELIVERY_PHONE}}</div>
+        <div>{{delivery.DELIVERY_STATUS}}</div>
+        <div>{{delivery.DELIVERY_COMPANY}}</div>
+
+    </div>
+    {% endblock %}
+  
+</body>
+</html>
