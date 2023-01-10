@@ -84,5 +84,3 @@ def deleteGoodsType(request, id):
     except Exception as e:
         logger.error(e)
     return redirect('pageSetup')
-
-

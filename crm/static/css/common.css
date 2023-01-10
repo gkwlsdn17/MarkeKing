@@ -96,7 +96,7 @@ footer{
 .table > thead > tr, .table > tbody > tr{ height: 50px; }
 .table > tbody > tr:nth-child(odd){ background-color: white; }
 .table > tbody > tr:nth-child(even){ background-color: #EDEFF1; }
-.td:hover{ background-color: skyblue; cursor: pointer; }
+.table > tbody > tr:hover .td{ background-color: skyblue; cursor: pointer; }
 
 .page-bar{ margin-top: 20px; }
 .page-bar > ul{ text-align: center; margin-left: auto; margin-right: auto;}

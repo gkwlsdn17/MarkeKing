@@ -21,6 +21,7 @@ urlpatterns = [
     path('sales/', sales_views.pageSalesMain, name='pageSalesMain'),
     path('sales/list/', sales_views.pageSalesList, name='pageSalesList'),
     path('sales/detail/<str:order_id>', sales_views.pageSalesDetail, name='pageSalesDetail'),
+    path('sales/delivery/list/', sales_views.pageDeliveryList, name='pageDeliveryList'),
 
     # 제품 관리
     path('goods/', goods_views.pageGoodsMain, name="pageGoodsMain"),

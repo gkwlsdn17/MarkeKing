@@ -18,8 +18,15 @@
 <body>
     {% extends 'main/sales_base_side.html' %}
     {% block main %}
-
+    <div id="header">
+        {% if site == 'sales' %}
+            <button class="btn" onclick="location.href='/sales/list?page={{page}}'">목록으로</button>
+        {% elif site == 'delivery' %}
+            <button class="btn" onclick="location.href='/sales/delivery/list?page={{page}}'">목록으로</button>
+        {% endif %}
+    </div>
     <div id="content">
+        
         <div>{{order.id}}</div>
         <div>{{order.ORDER_DATE}}</div>
         <div>{{order.MEMO}}</div>
@@ -40,7 +47,7 @@
         <div>{{delivery.DELIVERY_PHONE}}</div>
         <div>{{delivery.DELIVERY_STATUS}}</div>
         <div>{{delivery.DELIVERY_COMPANY}}</div>
-
+    
     </div>
     {% endblock %}
   

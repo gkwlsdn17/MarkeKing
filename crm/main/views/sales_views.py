@@ -28,7 +28,7 @@ def pageSalesList(request):
         if endDate is None:
             end = today + relativedelta(days=1)
             endDate = end.strftime('%Y%m%d')
-        print(startDate, endDate)
+        
         q = Q()
         q &= Q(ORDER_DATE__range=(startDate, endDate))
         q &= Q(DISCARD = False)
@@ -52,8 +52,47 @@ def pageSalesDetail(request, order_id):
         order = Order.objects.get(id = order_id)
         items = Item.objects.all().filter(ORDER_NO = order_id)
         delivery = Delivery.objects.filter(ORDER_NO = order_id)
+        page = request.GET.get('page', '1')
+        site = request.GET.get('site', '')
+        print(f'site={site}')
+        content = {'order': order, 'items': items, 'delivery': delivery, 'page': page, 'site': site}
+        
+        return render(request, 'main/sales_detail.html', content)
+    except Exception as e:
+        logger.error(e)
+        return render(request, 'main/error.html')
 
-        return render(request, 'main/sales_detail.html', {'order': order, 'items': items, 'delivery': delivery})
+@login_required
+def pageDeliveryList(request):
+    try:
+        startDate = request.GET.get('startDate', None)
+        endDate = request.GET.get('endDate', None)
+        arrivalStart = request.GET.get('arrivalStart', None)
+        arrivalEnd = request.GET.get('arrivalEnd', None)
+
+        today = datetime.datetime.now()
+
+        if startDate is None:
+            startDate = today.strftime('%Y%m')
+            startDate += '01'
+        if endDate is None:
+            end = today + relativedelta(days=1)
+            endDate = end.strftime('%Y%m%d')
+
+        q = Q()
+        q &= Q(DELIVERY_DATE__range=(startDate, endDate))
+        q &= Q(DISCARD = False)
+
+        delivery_list = Delivery.objects.all().annotate(
+            row = Window(expression=RowNumber(), order_by=F('id').asc())
+        ).filter(q).order_by('-row')
+        
+        page = request.GET.get('page', '1')
+        paginator = Paginator(delivery_list, '10')
+        page_obj = paginator.page(page)
+
+        content = {'page_obj': page_obj, 'startDate': startDate, 'endDate': endDate}
+        return render(request, 'main/sales_delivery_list.html', content)
     except Exception as e:
         logger.error(e)
         return render(request, 'main/error.html')
