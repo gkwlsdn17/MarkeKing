@@ -27,7 +27,7 @@
             <table class="table" id="sales_list">
                 <thead>
                     <tr>
-                        <th class="row">엥</th>
+                        <th class=""></th>
                         <th class="name">고객명</th>
                         <th class="date">주문일</th>
                         <th class="amount">금액</th>
@@ -37,7 +37,7 @@
                 <tbody>
                     {% for obj in page_obj %}
                     <tr onclick="location.href='/sales/detail/{{obj.id}}?page={{ page_obj.number }}&site=sales'">
-                        <td class="td row">{{obj.row}}</td>
+                        <td class="td">{{obj.row}}</td>
                         <td class="td name">{{obj.CUSTOMER_NO.CUSTOMER_NAME}}</td>
                         <td class="td date">{{obj.ORDER_DATE}}</td>
                         <td class="td amout">{{obj.TOTAL_AMOUNT}}</td>
