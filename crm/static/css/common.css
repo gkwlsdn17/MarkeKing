@@ -5,6 +5,18 @@ body{
     height: 100%;
 }
 
+@font-face {
+    font-family: 'BMDOHYEON';
+    src: url('../font/BMDOHYEON_ttf.ttf');
+}
+@font-face {
+    font-family: 'NanumBarunGothic';
+    src: url('../font/NanumBarunGothic.otf');
+}
+*{
+    font-family: 'NanumBarunGothic';
+}
+
 html, body, div, span, applet, object, iframe,
 h1, h2, h3, h4, h5, h6, p, blockquote, pre,
 a, abbr, acronym, address, big, cite, code,
@@ -38,6 +50,10 @@ header{
     height: 100px;
     background-color: #6D2962;
     overflow: hidden;
+}
+
+header *{
+    font-family: 'BMDOHYEON';
 }
 #login-bar { width: 100%; height: 30px; overflow: hidden;}
 #login-bar > div { float: right; }
@@ -98,7 +114,7 @@ footer{
 .table > tbody > tr:nth-child(even){ background-color: #EDEFF1; }
 .table > tbody > tr:hover .td{ background-color: skyblue; cursor: pointer; }
 
-.page-bar{ margin-top: 20px; }
+.page-bar{ margin-top: 20px; margin-bottom: 30px; }
 .page-bar > ul{ text-align: center; margin-left: auto; margin-right: auto;}
 .page-bar ul > li{ display: inline-block; margin-left: 10px; }
 .page-bar ul > li > a{ font-size: 20px;}

@@ -54,29 +54,31 @@
             <button class="btn left" onclick="search()">검색</button>
         </div>
         <div id="goods_list">
-            <table id="tb_goods_list" class="table">
-                <thead>
-                    <tr>
-                        <th class="tb_name">상품명</th>
-                        <th class="tb_type">상품타입</th>
-                        <th class="tb_barcode">바코드</th>
-                        <th class="tb_price">가격</th>
-                    </tr>
-                </thead>
-                <tbody>
-                    {% for goods in page_obj %}
-                    <tr class="tb_row" onclick="location.href='detail/{{goods.id}}'">
-                        <td class="td tb_name">{{ goods.NAME }}</td>
-                        <td class="td tb_type">{{ goods.TYPE.NAME }}</td>
-                        <td class="td tb_barcode">{{ goods.BARCODE }}</td>
-                        <td class="td tb_price">{{ goods.PRICE }}</td>
-                    </tr>
-                    {% endfor %}
-                </tbody>
-
-
-            </table>
-
+            <div id="tb_goods_list">
+                <table class="table">
+                    <thead>
+                        <tr>
+                            <th class="tb_name">상품명</th>
+                            <th class="tb_type">상품타입</th>
+                            <th class="tb_barcode">바코드</th>
+                            <th class="tb_price">가격</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        {% for goods in page_obj %}
+                        <tr class="tb_row" onclick="location.href='detail/{{goods.id}}'">
+                            <td class="td tb_name">{{ goods.NAME }}</td>
+                            <td class="td tb_type">{{ goods.TYPE.NAME }}</td>
+                            <td class="td tb_barcode">{{ goods.BARCODE }}</td>
+                            <td class="td tb_price">{{ goods.PRICE }}</td>
+                        </tr>
+                        {% endfor %}
+                    </tbody>
+    
+    
+                </table>
+            </div>
+            
             <div id="page_bar" class="page-bar">
                 <ul>
                     {% if page_obj.has_previous %}

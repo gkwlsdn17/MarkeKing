@@ -12,21 +12,22 @@
 .input-number{ width: 50px; }
 
 #customer_list{ 
-    margin-left: 8%; 
-    width: 85%;
-    overflow-x: auto; white-space:nowrap; 
+    width: 100%;
+    /* overflow-x: auto; white-space:nowrap;  */
     clear: right;
     clear: left;
 }
-#tb_customer_list{  text-align: center; margin-top: 20px; }
-#tb_customer_list > thead > tr > th{ background-color: black; color: white; }
-#tb_customer_list > thead > tr, #tb_customer_list > tbody > tr{ height: 50px; }
-#tb_customer_list > tbody > tr:nth-child(odd){ background-color: white; }
-#tb_customer_list > tbody > tr:nth-child(even){ background-color: #EDEFF1; }
-.tb{ width: 10%; padding: 5px;}
-.tb_name{ width: 15%; }
-.tb_id{ width: 15%; }
-.tb_email{ width: 20%; }
+
+.tb_name{ width: 8%; }
+.tb_id{ width: 8%; }
+.tb_birth{ width: 5%;}
+.tb_sex{ width: 4%; }
+.tb_phone{ width: 8%; }
+.tb_email{ width: 10%; }
+.first_visit{width: 7%; }
+.last_visit{ width: 7%; }
+.visit_cnt{ width: 4%; }
+.rating{ width: 8%; }
 #tb_row:hover td{ background-color: skyblue; cursor: pointer;}
 
 #page_bar{ margin-top: 20px; }

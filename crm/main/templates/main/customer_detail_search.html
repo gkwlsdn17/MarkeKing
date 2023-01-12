@@ -134,36 +134,36 @@
             </div>
             
             <div id="customer_list">
-                <table id="tb_customer_list">
+                <table id="tb_customer_list" class="table">
                     <thead>
                         <tr>
-                            <th class="tb tb_name">이름</th>
-                            <th class="tb tb_id">아이디</th>
-                            <th class="tb tb_birth">생년월일</th>
-                            <th class="tb tb_sex">성별</th>
+                            <th class="tb_name">이름</th>
+                            <th class="tb_id">아이디</th>
+                            <th class="tb_birth">생년월일</th>
+                            <th class="tb_sex">성별</th>
                             <th class="tb_phone">전화번호</th>
                             <th class="tb_email">이메일</th>
                             <th class="tb_addr">주소</th>
-                            <th class="tb">첫방문일</th>
-                            <th class="tb">마지막방문일</th>
-                            <th class="tb">방문횟수</th>
-                            <th class="tb">고객등급</th>
+                            <th class="first_visit">첫<br/>방문일</th>
+                            <th class="last_visit">마지막<br/>방문일</th>
+                            <th class="visit_cnt">방문<br/>횟수</th>
+                            <th class="rating">고객<br/>등급</th>
                         </tr>
                     </thead>
                     <tbody>
                         {% for customer in page_obj %}
                         <tr id="tb_row" onclick="location.href='/customer/detail/{{customer.CUSTOMER_ID}}'">
-                            <td class="tb">{{ customer.CUSTOMER_NAME }}</td>
-                            <td class="tb">{{ customer.CUSTOMER_ID }}</td>
-                            <td class="tb">{{ customer.CUSTOMER_BIRTH }}</td>
-                            <td class="tb">{{ customer.sex }}</td>
-                            <td class="tb">{{ customer.CUSTOMER_PHONE }}</td>
-                            <td class="tb">{{ customer.CUSTOMER_EMAIL }}</td>
-                            <td class="tb">{{ customer.CUSTOMER_ADDR }}</td>
-                            <td class="tb">{{ customer.FIRST_VISIT | date:'y-m-d'}}</td>
-                            <td class="tb">{{ customer.LAST_VISIT | date:'y-m-d'}}</td>
-                            <td class="tb">{{ customer.VISIT_CNT }}</td>
-                            <td class="tb">{{ customer.CUSTOMER_RATING.NAME }}</td>
+                            <td class="tb_name">{{ customer.CUSTOMER_NAME }}</td>
+                            <td class="tb_id">{{ customer.CUSTOMER_ID }}</td>
+                            <td class="tb_birth">{{ customer.CUSTOMER_BIRTH }}</td>
+                            <td class="tb_sex">{{ customer.sex }}</td>
+                            <td class="tb_phone">{{ customer.CUSTOMER_PHONE }}</td>
+                            <td class="tb_email">{{ customer.CUSTOMER_EMAIL }}</td>
+                            <td class="tb_addr">{{ customer.CUSTOMER_ADDR }}</td>
+                            <td class="first_visit">{{ customer.FIRST_VISIT | date:'y-m-d'}}</td>
+                            <td class="last_visit">{{ customer.LAST_VISIT | date:'y-m-d'}}</td>
+                            <td class="visit_cnt">{{ customer.VISIT_CNT }}</td>
+                            <td class="rating">{{ customer.CUSTOMER_RATING.NAME }}</td>
                         </tr>
                         {% endfor %}
                     </tbody>

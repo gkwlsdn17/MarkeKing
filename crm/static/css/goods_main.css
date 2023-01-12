@@ -28,3 +28,5 @@
 .tb_type{ width: 15%; }
 .tb_barcode{ width: 15%; }
 .tb_price{ width: 15%; }
+
+#tb_goods_list{ height: 600px;}
