@@ -1,0 +1,63 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>마케킹 - 주문하기</title>
+    <!-- Latest compiled and minified CSS -->
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@4.6.1/dist/css/bootstrap.min.css">
+    <!-- jQuery library -->
+    <script src="https://cdn.jsdelivr.net/npm/jquery@3.6.0/dist/jquery.slim.min.js"></script>
+    <!-- Popper JS -->
+    <script src="https://cdn.jsdelivr.net/npm/popper.js@1.16.1/dist/umd/popper.min.js"></script>
+    <!-- Latest compiled JavaScript -->
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@4.6.1/dist/js/bootstrap.bundle.min.js"></script>
+
+    <script>
+        var items = []
+        $(document).ready(function(){  
+            console.log(items)
+        })
+        function orderSubmit(){
+            var dname = $("input[name=dname").val()
+            var daddr = $("input[name=daddr]").val()
+            var dphone = $("input[name=dphone]").val()
+
+            var convert_items = JSON.stringify(items)
+            
+            var form = document.getElementById('form')
+            var json_input = document.createElement('input');
+            json_input.setAttribute('type', 'hidden');
+            json_input.setAttribute('name', 'items');
+            json_input.setAttribute('value', convert_items);
+            form.appendChild(json_input)
+            form.submit()
+        }
+
+    </script>
+</head>
+<body>
+    <div id="wrap">
+        <form id="form" onsubmit="return false" action="/order/submit", method="post", charset="utf-8">{% csrf_token %}
+            {% for item in goods %}
+            <script>
+                items.push({
+                    'GOODS_NO':'{{item.GOODS_NO}}', 
+                    'GOODS_NAME':'{{item.GOODS_NAME}}', 
+                    'GOODS_COUNT':'{{item.GOODS_COUNT}}', 
+                    'GOODS_PRICE':'{{item.GOODS_PRICE}}',
+                });
+            </script>       
+            <div>{{item.GOODS_NAME}}</div>
+            {% endfor %}
+            <div>배송지설정</div>
+            <div>받는분</div><input type="text" name="dname"> 
+            <div>배송지 주소</div><input type="text" name="daddr">
+            <div>배송지 전화번호</div><input type="text" name="dphone">
+            <button type="button" onclick="orderSubmit()">주문하기</button>
+        </form>
+        
+    </div>
+</body>
+</html>
