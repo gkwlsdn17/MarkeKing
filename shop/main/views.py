@@ -3,37 +3,63 @@ import json
 from django.http import HttpResponse
 from django.shortcuts import render, redirect
 from django.db import connection
+from .db.dao import *
+import traceback
 
 # Create your views here.
 def index(request):
     content = {}
     try:
-        c = connection.cursor()
-        query = f'''
-        SELECT main_goods.id, main_goods.NAME, main_goods.PRICE, main_goodstype.NAME
-        FROM main_goods join main_goodstype
-        ON main_goods.TYPE_id = main_goodstype.id
-        ORDER BY main_goods.id DESC LIMIT 10
-        '''
-        
-        res = c.execute(query)
-        items = c.fetchall()
-        for i in items:
-            print(i)
-
+        try:
+            user_id = request.session['markeking_shop_user_id']
+            content['user_id'] = user_id
+        except Exception as e:
+            # print(e)
+            pass
+        dao = Dao()
+        items = dao.getGoodsList()
         content['items'] = items
 
     except Exception as e:
-        print(e)
-    finally:
-        connection.close()
+        traceback.print_exc()
     
-    print(content)
     return render(request, 'main/index.html', content)
 
-def login(request):
+def pageLogin(request):
+    print(f"request.session:{request.session}")
     return render(request, 'main/login.html')
 
+def login(request):
+    try:
+        id = request.POST.get('id')
+        pw = request.POST.get('pw')
+
+        dao = Dao()
+        customer = dao.getCustomer(id)
+        
+        if customer.CUSTOMER_PW == pw:
+            request.session['markeking_shop_user_id'] = id
+            print('login success')
+            return redirect("/")
+
+        print('login fail')
+        return redirect("pageLogin")
+
+    except Exception as e: 
+        # print(e)
+        traceback.print_exc()
+        return redirect("pageLogin")
+
+def logout(request):
+    try:
+        id = request.session['markeking_shop_user_id']
+        print(f'{id} delete')
+        del request.session['markeking_shop_user_id']
+    except Exception as e:
+        print(e)
+    
+    return redirect("/")
+    
 def pageSignup(request):
     return render(request, 'main/signup.html')
 
@@ -55,40 +81,23 @@ def signup(request):
             sex = 2
         else:
             sex = 0
-        
-        c = connection.cursor()
-
-        query = f"SELECT COUNT(*) FROM main_customer WHERE CUSTOMER_ID = '{id}'"
-        res = c.execute(query)
-        rows = res.fetchone()
-        connection.commit()
-        print(f'res = {res}')
-        if rows[0] == 0:
-            query = f'''
-            INSERT INTO main_customer(CUSTOMER_ID, CUSTOMER_PW, CUSTOMER_NAME, CUSTOMER_BIRTH, CUSTOMER_PHONE, CUSTOMER_EMAIL, CUSTOMER_ZIPCODE, CUSTOMER_ADDR, CUSTOMER_SEX)
-            VALUES (%s, %s, %s, %s, %s, %s, %s, %s, {sex});
-            '''
-            c.execute(query, (id, pw, name, birth, phone, email, zipcode, addr))
-            connection.commit()
-
-            print('save ok')
-
+       
+        dao = Dao()
+        count = dao.getCustomerIdCount(id)
+        if count == 0:
+            res = dao.insertCustomer(id, pw, name, birth, phone, email, zipcode, addr, sex)
         else:
             print('exists')
 
-
     except Exception as e:
-        print(e)
-    finally:
-        connection.close()
+        traceback.print_exc()
 
-    return render(request, 'main/signup.html')
+    return redirect("/")
 
 def pageOrder(request):
     content = {}
     goods = json.loads(request.POST.get('goods'))
     content['goods'] = goods
-    print(content)
     return render(request, 'main/order.html', content)
 
 def orderSubmit(request):
@@ -99,21 +108,41 @@ def orderSubmit(request):
         dphone = request.POST.get('dphone')
         items = json.loads(request.POST.get('items'))
 
+        total_amount = 0
         for item in items:
-            print(item)
+            price = int(item['GOODS_COUNT']) * int(item['GOODS_PRICE'])
+            item['TOTAL_AMOUNT'] = price
+            total_amount += price
 
-        # today = datetime.datetime.now().strftime('%Y%m%d')
-        # print(today)
-        # user_id = request.session['user_id']
-        # query = f"SELECT id FROM main_customer WHERE id = {user_id}"
-        # cursor = connection.cursor()
-        # cursor.execute(query)
-        # res = cursor.fetchone()
-        # id = res[0]
-        # query = F'''INSERT INTO main_order(CUSTOMER_NO, ORDER_DATE, TOTAL_AMOUNT, MEMO, CRTIME, DISCARD) 
-        # VALUES({id}, '{today}', );
-        # '''
+        today = datetime.now().strftime('%Y%m%d%H%M%S')
+
+        user_id = request.session['markeking_shop_user_id']
+        dao = Dao()
+        cid = dao.getCustomerId(user_id)
+        if cid != '':
+            od = dao.insertOrder(cid, today, total_amount)
+            if od:
+                oid = dao.getOrderId(cid, today)
+                if oid:
+                    for item in items:
+                        result = dao.insertItem(oid, item['GOODS_NO'], item['GOODS_NAME'], int(item['GOODS_COUNT']), int(item['GOODS_PRICE']), item['TOTAL_AMOUNT'])
+                        if result == False:
+                            raise Exception('item db insert fail')
+                    
+                    result = dao.insertDelivery(oid, cid, dname, daddr, dphone)
+                    if result == False:
+                        raise Exception('delivery db insert fail')
+
+                    print(":::order submit success:::")
+                else:
+                    raise Exception('order id not find')
+            else:
+                raise Exception('order db insert fail')
+        else:
+            raise Exception('customer id not find')
+
     except Exception as e:
         print(e)
+        traceback.print_exc()
 
     return redirect("/")
