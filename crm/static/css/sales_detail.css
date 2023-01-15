@@ -1,0 +1,16 @@
+
+.title{ font-weight: bold; font-size: 20px; margin-bottom: 10px;}
+.wrap{
+    overflow: hidden;
+    margin-left: 30px;
+    margin-top: 30px;
+    margin-bottom: 10px;
+}
+.left{ float:left; }
+.order-title{ margin-right: 10px;}
+.order{ margin-right: 20px; margin-bottom: 15px;}
+.memo{ clear: both; }
+#items{ margin-right: 30px; }
+.delivery{ margin-bottom: 10px;}
+.delivery-title{ clear: both; margin-right: 20px; width: 100px;}
+.back-btn{ float: right; margin-left: 30px; margin-top: 20px; margin-right: 40px;}

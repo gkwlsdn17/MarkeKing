@@ -50,11 +50,13 @@ def pageSalesList(request):
 def pageSalesDetail(request, order_id):
     try:
         order = Order.objects.get(id = order_id)
-        items = Item.objects.all().filter(ORDER_NO = order_id)
-        delivery = Delivery.objects.filter(ORDER_NO = order_id)
+        items = Item.objects.all().annotate(
+            row = Window(expression=RowNumber(), order_by=F('id').asc()),
+            ).filter(ORDER_NO = order_id)
+        delivery = Delivery.objects.get(ORDER_NO = order_id)
         page = request.GET.get('page', '1')
         site = request.GET.get('site', '')
-        print(f'site={site}')
+        print(delivery)
         content = {'order': order, 'items': items, 'delivery': delivery, 'page': page, 'site': site}
         
         return render(request, 'main/sales_detail.html', content)
@@ -70,6 +72,8 @@ def pageDeliveryList(request):
         arrivalStart = request.GET.get('arrivalStart', None)
         arrivalEnd = request.GET.get('arrivalEnd', None)
 
+        pageType = request.GET.get('type', 'B')
+
         today = datetime.datetime.now()
 
         if startDate is None:
@@ -80,18 +84,27 @@ def pageDeliveryList(request):
             endDate = end.strftime('%Y%m%d')
 
         q = Q()
-        q &= Q(DELIVERY_DATE__range=(startDate, endDate))
         q &= Q(DISCARD = False)
 
-        delivery_list = Delivery.objects.all().annotate(
-            row = Window(expression=RowNumber(), order_by=F('id').asc())
-        ).filter(q).order_by('-row')
+        if pageType == 'B':
+            q &= (Q(DELIVERY_DATE = '') | Q(DELIVERY_DATE__isnull=True))
+
+            delivery_list = Delivery.objects.all().annotate(
+            row = Window(expression=RowNumber(), order_by=F('id').asc()),
+            ).filter(q).order_by('-row')
+            
+        
+        else:
+            q &= Q(DELIVERY_DATE__range=(startDate, endDate))
+            delivery_list = Delivery.objects.all().annotate(
+                row = Window(expression=RowNumber(), order_by=F('id').asc())
+            ).filter(q).order_by('-row')
         
         page = request.GET.get('page', '1')
         paginator = Paginator(delivery_list, '10')
         page_obj = paginator.page(page)
 
-        content = {'page_obj': page_obj, 'startDate': startDate, 'endDate': endDate}
+        content = {'page_obj': page_obj, 'startDate': startDate, 'endDate': endDate, 'pageType': pageType}
         return render(request, 'main/sales_delivery_list.html', content)
     except Exception as e:
         logger.error(e)

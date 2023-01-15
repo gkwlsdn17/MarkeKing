@@ -13,40 +13,82 @@
     <script src="https://cdn.jsdelivr.net/npm/popper.js@1.16.1/dist/umd/popper.min.js"></script>
     <!-- Latest compiled JavaScript -->
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@4.6.1/dist/js/bootstrap.bundle.min.js"></script>
+    <link rel="stylesheet" type="text/css" href="/static/css/sales_detail.css">
+    <script src="/static/js/util.js"></script>
+    <script>
+        $(document).ready(function(){
+            cp = document.getElementById('customer_phone')
+            dp = document.getElementById('delivery_phone')
+            convertPhone(cp);
+            convertPhone(dp);
 
+            od = document.getElementById('order_date')
+            convertDate(od);
+        })
+
+        
+    </script>
 </head>
 <body>
     {% extends 'main/sales_base_side.html' %}
     {% block main %}
     <div id="header">
         {% if site == 'sales' %}
-            <button class="btn" onclick="location.href='/sales/list?page={{page}}'">목록으로</button>
+            <button class="btn back-btn" onclick="location.href='/sales/list?page={{page}}'">목록으로</button>
         {% elif site == 'delivery' %}
-            <button class="btn" onclick="location.href='/sales/delivery/list?page={{page}}'">목록으로</button>
+            <button class="btn back-btn" onclick="location.href='/sales/delivery/list?page={{page}}'">목록으로</button>
         {% endif %}
     </div>
     <div id="content">
         
-        <div>{{order.id}}</div>
-        <div>{{order.ORDER_DATE}}</div>
-        <div>{{order.MEMO}}</div>
+        <div id="order" class="wrap">
+            <div class="order order-title left">주문번호</div><div class="order left">{{order.id}}</div><div class="order left">|</div>
+            <div class="order order-title left">주문날짜</div><div class="order left" id="order_date">{{order.ORDER_DATE}}</div><div class="order left">|</div>
+            <div class="order order-title left"> 주문자</div><div class="order left">{{order.CUSTOMER_NO.CUSTOMER_NAME}}</div><div class="order left">|</div>
+            <div class="order order-title left"> 주문자 아이디</div><div class="order left">{{order.CUSTOMER_NO.CUSTOMER_ID}}</div><div class="order left">|</div>
+            <div class="order order-title left"> 주문자 전화번호</div><div class="order left" id="customer_phone">{{order.CUSTOMER_NO.CUSTOMER_PHONE}}</div>
+            <div class="order order-title memo">메모사항</div><div class="order memo">{{order.MEMO}}</div>
+        </div>
+        
 
-        <div>주문 내역</div>
-        {% for item in items %}
-        <div>{{item.GOODS_NAME}}</div>
-        <div>{{item.GOODS_COUNT}}</div>
-        <div>{{item.PRICE}}</div>
-        <div>{{item.TOTAL_AMOUNT}}</div>
-        {% endfor %}
+        <div id="items" class="wrap">
+            <div class="title">주문 내역</div>
+            <table class="table">
+                <thead>
+                    <th>번호</th>
+                    <th>상품명</th>
+                    <th>갯수</th>
+                    <th>단가</th>
+                    <th>총금액</th>
+                </thead>
+                <tbody>
+                    {% for item in items %}
+                    <tr>
+                        <td>{{item.row}}</td>
+                        <td>{{item.GOODS_NAME}}</td>
+                        <td>{{item.GOODS_COUNT}}</td>
+                        <td>{{item.PRICE}}</td>
+                        <td>{{item.TOTAL_AMOUNT}}</td>
+                    </tr>
+                    {% endfor %}
 
-        <div>배송 정보</div>
-        <div>{{delivery.DELIVERY_DATE}}</div>
-        <div>{{delivery.ARRIVAL_DATE}}</div>
-        <div>{{delivery.DELIVERY_NAME}}</div>
-        <div>{{delivery.DELIVERY_ADDR}}</div>
-        <div>{{delivery.DELIVERY_PHONE}}</div>
-        <div>{{delivery.DELIVERY_STATUS}}</div>
-        <div>{{delivery.DELIVERY_COMPANY}}</div>
+                </tbody>
+            </table>
+
+        </div>
+        
+
+        <div id="delivery" class="wrap">
+            <div class="title">배송 정보</div>
+            <div class="delivery delivery-title left">배송시작일</div>      <div class="delivery ">{{delivery.DELIVERY_DATE}}</div>
+            <div class="delivery delivery-title left">배송종료일</div>      <div class="delivery ">{{delivery.ARRIVAL_DATE}}</div>
+            <div class="delivery delivery-title left">받는분</div>          <div class="delivery ">{{delivery.DELIVERY_NAME}}</div>
+            <div class="delivery delivery-title left">배송주소</div>        <div class="delivery ">{{delivery.DELIVERY_ADDR}}</div>
+            <div class="delivery delivery-title left">배송지전화번호</div>   <div class="delivery" id="delivery_phone">{{delivery.DELIVERY_PHONE}}</div>
+            <div class="delivery delivery-title left">배송상태</div>        <div class="delivery ">{{delivery.DELIVERY_STATUS.STATUS}}</div>
+            <div class="delivery delivery-title left">배송회사</div>   <div class="delivery ">{{delivery.DELIVERY_COMPANY.COMPANY_NAME}}</div>
+        </div>
+
     
     </div>
     {% endblock %}

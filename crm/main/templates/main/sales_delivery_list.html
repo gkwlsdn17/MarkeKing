@@ -14,7 +14,14 @@
     <script src="https://cdn.jsdelivr.net/npm/popper.js@1.16.1/dist/umd/popper.min.js"></script>
     <!-- Latest compiled JavaScript -->
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@4.6.1/dist/js/bootstrap.bundle.min.js"></script>
-
+    <style>
+        .select-btn{
+            background-color: skyblue;
+        }
+        .default-btn{
+            background-color: gray;
+        }
+    </style>
 </head>
 
 <body>
@@ -24,6 +31,13 @@
 
     <div id="content">
         <div>
+            {% if pageType == 'B' %}
+                <button class="select-btn" onclick="location.href='/sales/delivery/list?type=B'">배송요청필요</button>
+                <button class="default-btn" onclick="location.href='/sales/delivery/list?type=A'">배송요청완료</button>
+            {% else %}
+                <button class="default-btn" onclick="location.href='/sales/delivery/list?type=B'">배송요청필요</button>
+                <button class="select-btn" onclick="location.href='/sales/delivery/list?type=A'">배송요청완료</button>
+            {% endif %}
             <table class="table">
                 <thead>
                     <tr>

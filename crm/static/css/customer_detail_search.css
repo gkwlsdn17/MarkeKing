@@ -24,8 +24,8 @@
 .tb_sex{ width: 4%; }
 .tb_phone{ width: 8%; }
 .tb_email{ width: 10%; }
-.first_visit{width: 7%; }
-.last_visit{ width: 7%; }
+.first_visit{width: 8%; }
+.last_visit{ width: 8%; }
 .visit_cnt{ width: 4%; }
 .rating{ width: 8%; }
 #tb_row:hover td{ background-color: skyblue; cursor: pointer;}
