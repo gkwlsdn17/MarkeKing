@@ -24,19 +24,78 @@
 
     <div id="content">
         <div>
-            <table>
+            <table class="sales-table">
                 <tr>
-                    <th></th>
-                    <th>제목1</th>
-                    <th>제목2</th>
+                    <th>주간판매량</th>
+                    <th>주간판매합계</th>
                 </tr>
                 <tr>
-                    <td>서브제목</td>
-                    <td>내용1</td>
-                    <td>내용2</td>
+                    <td>{{ weekSalesCnt }}</td>
+                    <td>{{ weekSalesSum }}</td>
                 </tr>
             </table>
+            <table class="sales-table">
+                <tr>
+                    <th>배송상태</th>
+                    <th>건수</th>
+                </tr>
+                {% for obj in deliveryList %}
+                <tr>
+                    <td>{{ obj.DELIVERY_STATUS__STATUS }}</td>
+                    <td>{{ obj.cnt }}</td>
+                </tr>
+                {% endfor %}
+            </table>
         </div>
+
+        <div>
+            <table class="sales-table">
+                <tr>
+                    <th>순위</th>
+                    <th>아이디</th>
+                    <th>주문횟수</th>
+                </tr>
+                {% for obj in cntTopList %}
+                <tr>
+                    <td>{{ obj.row }}</td>
+                    <td>{{ obj.CUSTOMER_NO__CUSTOMER_ID }}</td>
+                    <td>{{ obj.cnt}}</td>
+                </tr>
+                {% endfor %}
+            </table>
+
+            <table class="sales-table">
+                <tr>
+                    <th>순위</th>
+                    <th>아이디</th>
+                    <th>금액</th>
+                </tr>
+                {% for obj in amtTopList %}
+                <tr>
+                    <td>{{ obj.row }}</td>
+                    <td>{{ obj.CUSTOMER_NO__CUSTOMER_ID }}</td>
+                    <td>{{ obj.TOTAL_AMOUNT}}</td>
+                </tr>
+                {% endfor %}
+            </table>
+
+            <table class="sales-table">
+                <tr>
+                    <th>순위</th>
+                    <th>상품명</th>
+                    <th>판매횟수</th>
+                </tr>
+                {% for obj in itemList %}
+                <tr>
+                    <td>{{ obj.row }}</td>
+                    <td>{{ obj.GOODS_NAME }}</td>
+                    <td>{{ obj.cnt}}</td>
+                </tr>
+                {% endfor %}
+            </table>
+        </div>
+
+
 
     </div>
     {% endblock %}

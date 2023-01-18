@@ -18,6 +18,16 @@ class Customer(models.Model):
     CRTIME = models.DateTimeField(auto_now=True)
     DISCARD = models.BooleanField(default=False)
 
+    def __str__(self):
+        return f'''
+        customer_table_id={self.id}, CUSTOMER_ID={self.CUSTOMER_ID}, 
+        CUSTOMER_NAME={self.CUSTOMER_NAME}, CUSTOMER_BIRTH={self.CUSTOMER_BIRTH}, 
+        CUSTOMER_PHONE={self.CUSTOMER_PHONE}, CUSTOMER_EMAIL={self.CUSTOMER_EMAIL},
+        CUSTOMER_ZIPCODE={self.CUSTOMER_ZIPCODE}, CUSTOMER_ADDR={self.CUSTOMER_ADDR},
+        FIRST_VISIT={self.FIRST_VISIT}, LAST_VISIT={self.LAST_VISIT},
+        CUSTOMER_SEX={self.CUSTOMER_SEX},
+        CRTIME={self.CRTIME}, DISCARD={self.DISCARD}'''
+
 class Rating(models.Model):
     NAME = models.CharField(max_length=20)
     ORDER = models.IntegerField(default=0)
@@ -42,6 +52,17 @@ class Order(models.Model):
     MEMO = models.CharField(max_length=1024, default='')
     CRTIME = models.DateTimeField(auto_now=True)
     DISCARD = models.BooleanField(default=False)
+    
+    def __str__(self):
+        return f'''
+        Order_table_id={self.id},
+        CUSTOMER_NO={self.CUSTOMER_NO},
+        ORDER_DATE={self.ORDER_DATE},
+        TOTAL_AMOUNT={self.TOTAL_AMOUNT},
+        MEMO={self.MEMO},
+        CRTIME={self.CRTIME},
+        DISCARD={self.DISCARD}
+        '''
 
 class Item(models.Model):
     ORDER_NO = models.ForeignKey('Order', on_delete=models.DO_NOTHING)
@@ -59,10 +80,24 @@ class Delivery(models.Model):
     DELIVERY_NAME = models.CharField(max_length=200)
     DELIVERY_ADDR = models.CharField(max_length=1024)
     DELIVERY_PHONE = models.CharField(max_length=100)
-    DELIVERY_STATUS = models.ForeignKey('DeliveryStatus', on_delete=models.DO_NOTHING, default=0)
-    DELIVERY_COMPANY = models.ForeignKey('DeliveryCompany', on_delete=models.DO_NOTHING, default=0)
+    DELIVERY_STATUS = models.ForeignKey('DeliveryStatus', on_delete=models.DO_NOTHING, default=1)
+    DELIVERY_COMPANY = models.ForeignKey('DeliveryCompany', on_delete=models.DO_NOTHING, default=1)
     CRTIME = models.DateTimeField(auto_now=True)
     DISCARD = models.BooleanField(default=False)
+
+    def __str__(self):
+        return f'''
+        CUSTOMER_NO={self.CUSTOMER_NO.id}
+        ,DELIVERY_DATE={self.DELIVERY_DATE}
+        ,ARRIVAL_DATE={self.ARRIVAL_DATE}
+        ,DELIVERY_NAME={self.DELIVERY_NAME}
+        ,DELIVERY_ADDR={self.DELIVERY_ADDR}
+        ,DELIVERY_PHONE={self.DELIVERY_PHONE}
+        ,DELIVERY_STATUS={self.DELIVERY_STATUS}
+        ,DELIVERY_COMPANY{self.DELIVERY_COMPANY}
+        ,CRTIME={self.CRTIME}
+        ,DISCARD={self.DISCARD}
+        '''
 
 class DeliveryStatus(models.Model):
     STATUS = models.CharField(max_length=512)

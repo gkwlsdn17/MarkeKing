@@ -11,7 +11,105 @@ logger = logging.getLogger('sales')
 
 @login_required
 def pageSalesMain(request):
-    return render(request, 'main/sales_main.html')
+    content = {}
+    try:
+        #(start.strftime('%Y-%m-%d'), (today + relativedelta(days=1)).strftime('%Y-%m-%d')
+        today = datetime.datetime.today()
+        weekday = today.weekday()
+
+        # 이번주 월 ~ 일까지 데이터 구함
+        startDate = (today + relativedelta(days=-weekday)).strftime('%Y%m%d')
+        endDate = (today + relativedelta(days=7-weekday)).strftime('%Y%m%d')
+        content['startDate'] = startDate
+        content['endDate'] = endDate
+
+        q = Q()
+        q &= Q(ORDER_DATE__range=(startDate, endDate))
+        q &= Q(DISCARD = False)
+
+        weekSalesCnt = Order.objects.all().filter(q).count()
+        weekSalesSum = Order.objects.all().filter(q).aggregate(sum = Sum('TOTAL_AMOUNT'))
+        content['weekSalesCnt'] = weekSalesCnt
+        content['weekSalesSum'] = weekSalesSum['sum']
+
+        cntTopList = getOrderCntTopList(q, 5)
+        if cntTopList:
+            content['cntTopList'] = cntTopList
+
+        amtTopList = getOrderAmtTopList(q, 5)
+        if amtTopList:
+            content['amtTopList'] = amtTopList    
+
+        # for i in cntTopList:
+        #     print(i)
+        # for i in amtTopList:
+        #     print(i)
+        
+        q2 = Q(ORDER_NO__DISCARD=False)
+        q2 &= Q(ORDER_NO__ORDER_DATE__range=(startDate, endDate))
+
+        itemList = getItemTopList(q2 ,5)
+        if itemList:
+            content['itemList'] = itemList
+        # for i in itemList:
+        #     print(i)
+
+
+        deliveryList = getDeliveryStatus(q2)
+        if deliveryList:
+            content['deliveryList'] = deliveryList
+        # for i in deliveryList:
+        #     print(i)
+
+        
+    except Exception as e:
+        logger.error(e)
+        
+    return render(request, 'main/sales_main.html', content)
+
+def getOrderCntTopList(q, limit):
+    try:
+        # 주문횟수 top
+        cntTopList = Order.objects.all().filter(q).values('CUSTOMER_NO__CUSTOMER_ID').annotate(
+            cnt = Count('CUSTOMER_NO__CUSTOMER_ID'),
+            row = Window(expression=RowNumber(), order_by=F('cnt').desc()),
+        ).values('row', 'cnt', 'CUSTOMER_NO__CUSTOMER_ID').order_by('-cnt')[:limit]
+        return cntTopList
+    except Exception as e:
+        logger.error(e)
+        return None
+
+def getOrderAmtTopList(q, limit):
+    try:
+        # 주문금액 top
+        amtTopList = Order.objects.all().filter(q).values('CUSTOMER_NO__CUSTOMER_ID', 'TOTAL_AMOUNT').annotate(
+            row = Window(expression=RowNumber(), order_by=F('TOTAL_AMOUNT').desc()),
+        ).order_by('row')[:limit]
+        return amtTopList
+    except Exception as e:
+        logger.error(e)
+        return None
+
+def getItemTopList(q, limit):
+    try:
+        itemList = Item.objects.all().filter(q).values('GOODS_NO__id', 'GOODS_NAME', 'GOODS_COUNT').annotate(
+            cnt = Count('GOODS_NO__id'),
+            count = Sum('GOODS_COUNT'),
+            row = Window(expression=RowNumber(), order_by=F('cnt').desc()),
+        ).values('cnt','GOODS_NAME','count','row').order_by('-cnt')[:limit]
+        return itemList
+    except Exception as e:
+        logger.error(e)
+        return None
+
+def getDeliveryStatus(q):
+    try:
+        list = Delivery.objects.all().filter(q).values('DELIVERY_STATUS_id', 'DELIVERY_STATUS__STATUS').annotate(cnt = Count('DELIVERY_STATUS_id')).values(
+            'cnt', 'DELIVERY_STATUS_id', 'DELIVERY_STATUS__STATUS').order_by('DELIVERY_STATUS_id')
+        return list
+    except Exception as e:
+        logger.error(e)
+        return None
 
 @login_required
 def pageSalesList(request):
