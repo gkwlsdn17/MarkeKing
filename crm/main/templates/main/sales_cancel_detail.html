@@ -18,12 +18,12 @@
     <script>
         $(document).ready(function(){
             cp = document.getElementById('customer_phone')
-            dp = document.getElementById('delivery_phone')
             convertPhone(cp);
-            convertPhone(dp);
 
             od = document.getElementById('order_date')
             convertDate(od);
+            cd = document.getElementById('cancel_date')
+            convertDate(cd);
         })
 
         
@@ -33,17 +33,14 @@
     {% extends 'main/sales_base_side.html' %}
     {% block main %}
     <div id="header">
-        {% if site == 'sales' %}
-            <button class="btn back-btn" onclick="location.href='/sales/list?page={{page}}'">목록으로</button>
-        {% elif site == 'delivery' %}
-            <button class="btn back-btn" onclick="location.href='/sales/delivery/list?page={{page}}'">목록으로</button>
-        {% endif %}
+        <button class="btn back-btn" onclick="location.href='/sales/cancel/list/?page={{page}}'">목록으로</button>
     </div>
     <div id="content">
         
         <div id="order" class="wrap">
             <div class="order order-title left">주문번호</div><div class="order left">{{order.id}}</div><div class="order left">|</div>
             <div class="order order-title left">주문날짜</div><div class="order left" id="order_date">{{order.ORDER_DATE}}</div><div class="order left">|</div>
+            <div class="order order-title left">취소날짜</div><div class="order left" id="cancel_date">{{order.CANCEL_DATE}}</div><div class="order left">|</div>
             <div class="order order-title left"> 주문자</div><div class="order left">{{order.CUSTOMER_NO.CUSTOMER_NAME}}</div><div class="order left">|</div>
             <div class="order order-title left"> 주문자 아이디</div><div class="order left">{{order.CUSTOMER_NO.CUSTOMER_ID}}</div><div class="order left">|</div>
             <div class="order order-title left"> 주문자 전화번호</div><div class="order left" id="customer_phone">{{order.CUSTOMER_NO.CUSTOMER_PHONE}}</div>
@@ -52,7 +49,7 @@
         
 
         <div id="items" class="wrap">
-            <div class="title">주문 내역</div>
+            <div class="title">주문 취소 내역</div>
             <table class="table">
                 <thead>
                     <th>번호</th>
@@ -76,22 +73,7 @@
             </table>
 
         </div>
-        
-
-        <div id="delivery" class="wrap">
-            <div class="title">배송 정보</div>
-            <div class="delivery delivery-title left">배송시작일</div>      <div class="delivery ">{{delivery.DELIVERY_DATE}}</div>
-            <div class="delivery delivery-title left">배송종료일</div>      <div class="delivery ">{{delivery.ARRIVAL_DATE}}</div>
-            <div class="delivery delivery-title left">받는분</div>          <div class="delivery ">{{delivery.DELIVERY_NAME}}</div>
-            <div class="delivery delivery-title left">배송주소</div>        <div class="delivery ">{{delivery.DELIVERY_ADDR}}</div>
-            <div class="delivery delivery-title left">배송지전화번호</div>   <div class="delivery" id="delivery_phone">{{delivery.DELIVERY_PHONE}}</div>
-            <div class="delivery delivery-title left">배송상태</div>        <div class="delivery ">{{delivery.DELIVERY_STATUS.STATUS}}</div>
-            <div class="delivery delivery-title left">배송회사</div>   <div class="delivery ">{{delivery.DELIVERY_COMPANY.COMPANY_NAME}}</div>
-        </div>
-
-        <div>
-            <button class="btn back-btn right" onclick="location.href='/sales/cancel/{{ order.id }}'">주문취소</button>
-        </div>
+    
 
     
     </div>

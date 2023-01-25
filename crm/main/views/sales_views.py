@@ -6,6 +6,7 @@ from dateutil.relativedelta import relativedelta
 from ..decorators import login_required
 import datetime
 from ..models import *
+import traceback
 import logging
 logger = logging.getLogger('sales')
 
@@ -28,9 +29,9 @@ def pageSalesMain(request):
         q &= Q(DISCARD = False)
 
         weekSalesCnt = Order.objects.all().filter(q).count()
-        weekSalesSum = Order.objects.all().filter(q).aggregate(sum = Sum('TOTAL_AMOUNT'))
+        weekSalesSum = Order.objects.all().filter(q).aggregate(sum = Sum('TOTAL_AMOUNT'))['sum'] or 0
         content['weekSalesCnt'] = weekSalesCnt
-        content['weekSalesSum'] = weekSalesSum['sum']
+        content['weekSalesSum'] = weekSalesSum
 
         cntTopList = getOrderCntTopList(q, 5)
         if cntTopList:
@@ -206,4 +207,82 @@ def pageDeliveryList(request):
         return render(request, 'main/sales_delivery_list.html', content)
     except Exception as e:
         logger.error(e)
+        return render(request, 'main/error.html')
+
+# 주문취소
+@login_required
+def salesCancel(request, order_id):
+    try:
+        delivery = Delivery.objects.get(ORDER_NO=order_id)
+        items = Item.objects.filter(ORDER_NO=order_id)
+        order = Order.objects.get(id = order_id)
+
+        delivery.DISCARD = True
+        delivery.save()
+        logger.info(f'Delivery {delivery.id} DISCARD Success (Order ID: {order_id})')
+        for item in items:
+            item_id = item.id
+            item.DISCARD = True
+            logger.info(f'Item {item_id} DISCARD Success (Order ID: {order_id})')
+        
+        
+        order.DISCARD = True
+        order.CANCEL_DATE = datetime.datetime.now().strftime('%Y%m%d%H%M%S')
+        order.save()
+        logger.info(f'Order {order_id} DISCARD Success')
+        
+        return redirect('pageSalesCancelList')
+    except Exception as e:
+        logger.error(e)
+        return render(request, 'main/error.html')
+
+# 주문취소내역
+@login_required
+def pageSalesCancelList(request):
+    searchQuery = ""
+    try:
+        startDate = request.GET.get('startDate', None)
+        endDate = request.GET.get('endDate', None)
+
+        today = datetime.datetime.now()
+
+        if startDate is None:
+            startDate = today.strftime('%Y%m')
+            startDate += '01'
+        if endDate is None:
+            end = today + relativedelta(days=1)
+            endDate = end.strftime('%Y%m%d')
+        
+        q = Q()
+        q &= Q(ORDER_DATE__range=(startDate, endDate))
+        q &= Q(DISCARD = True)
+
+        sales_list = Order.objects.all().annotate(
+            row = Window(expression=RowNumber(), order_by=F('id').asc())
+        ).filter(q).order_by('-row')
+        
+        page = request.GET.get('page', '1')
+        paginator = Paginator(sales_list, '10')
+        page_obj = paginator.page(page)
+        return render(request, 'main/sales_cancel_list.html',{'page_obj': page_obj, 'startDate': startDate, 'endDate': endDate})
+    except Exception as e:
+        logger.error(e)
+        traceback.print_exc()
+        return render(request, 'main/error.html')
+
+# 주문취소상세내역
+@login_required
+def pageSalesCancelDetail(request, order_id):
+    try:
+        order = Order.objects.get(id = order_id)
+        items = Item.objects.all().annotate(
+            row = Window(expression=RowNumber(), order_by=F('id').asc()),
+            ).filter(ORDER_NO = order_id)
+        
+        page = request.GET.get('page', '1')
+        content = {'order': order, 'items': items, 'page': page}
+        
+        return render(request, 'main/sales_cancel_detail.html', content)
+    except Exception as e:
+        logger.error(traceback.print_exc())
         return render(request, 'main/error.html')

@@ -7,6 +7,7 @@
     margin-bottom: 10px;
 }
 .left{ float:left; }
+.right{ float: right; }
 .order-title{ margin-right: 10px;}
 .order{ margin-right: 20px; margin-bottom: 15px;}
 .memo{ clear: both; }
