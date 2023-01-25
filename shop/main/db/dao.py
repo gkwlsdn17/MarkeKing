@@ -100,8 +100,8 @@ class Dao():
         result = False
         try:
             query = f'''
-            INSERT INTO main_item(ORDER_NO_id, GOODS_NO_id, GOODS_NAME, GOODS_COUNT, PRICE, TOTAL_AMOUNT)
-            VALUES ({oid}, {gid}, '{gname}', {count}, {price}, {amount});
+            INSERT INTO main_item(ORDER_NO_id, GOODS_NO_id, GOODS_NAME, GOODS_COUNT, PRICE, TOTAL_AMOUNT, DISCARD)
+            VALUES ({oid}, {gid}, '{gname}', {count}, {price}, {amount}, false);
             '''
 
             res = c.execute(query)
@@ -121,8 +121,8 @@ class Dao():
         result = False
         try:
             query = f'''
-            INSERT INTO main_delivery(ORDER_NO_id, CUSTOMER_NO_id, DELIVERY_NAME, DELIVERY_ADDR, DELIVERY_PHONE, CRTIME, DISCARD)
-            VALUES ({oid}, {cid}, '{dname}', '{daddr}', '{dphone}', datetime('now','localtime'), false);
+            INSERT INTO main_delivery(ORDER_NO_id, CUSTOMER_NO_id, DELIVERY_NAME, DELIVERY_ADDR, DELIVERY_PHONE, DELIVERY_STATUS_id, DELIVERY_COMPANY_id, CRTIME, DISCARD)
+            VALUES ({oid}, {cid}, '{dname}', '{daddr}', '{dphone}', 1, 1, datetime('now','localtime'), false);
             '''
             res = c.execute(query)
             connection.commit()
