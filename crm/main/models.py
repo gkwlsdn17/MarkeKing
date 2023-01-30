@@ -82,8 +82,8 @@ class Delivery(models.Model):
     DELIVERY_NAME = models.CharField(max_length=200)
     DELIVERY_ADDR = models.CharField(max_length=1024)
     DELIVERY_PHONE = models.CharField(max_length=100)
-    DELIVERY_STATUS = models.ForeignKey('DeliveryStatus', on_delete=models.DO_NOTHING, default=1)
-    DELIVERY_COMPANY = models.ForeignKey('DeliveryCompany', on_delete=models.DO_NOTHING, default=1)
+    DELIVERY_STATUS = models.ForeignKey('DeliveryStatus', on_delete=models.DO_NOTHING, default=1, null=True)
+    DELIVERY_COMPANY = models.ForeignKey('DeliveryCompany', on_delete=models.DO_NOTHING, default=1, null=True)
     CRTIME = models.DateTimeField(auto_now=True)
     DISCARD = models.BooleanField(default=False)
 

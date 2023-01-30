@@ -15,6 +15,8 @@
     <!-- Latest compiled JavaScript -->
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@4.6.1/dist/js/bootstrap.bundle.min.js"></script>
 
+    <link rel="stylesheet" type="text/css" href="/static/css/sales_main.css">
+
 </head>
 
 <body>
@@ -23,80 +25,142 @@
     {% block main %}
 
     <div id="content">
-        <div>
-            <table class="sales-table">
-                <tr>
-                    <th>주간판매량</th>
-                    <th>주간판매합계</th>
-                </tr>
-                <tr>
-                    <td>{{ weekSalesCnt }}</td>
-                    <td>{{ weekSalesSum }}</td>
-                </tr>
-            </table>
-            <table class="sales-table">
-                <tr>
-                    <th>배송상태</th>
-                    <th>건수</th>
-                </tr>
-                {% for obj in deliveryList %}
-                <tr>
-                    <td>{{ obj.DELIVERY_STATUS__STATUS }}</td>
-                    <td>{{ obj.cnt }}</td>
-                </tr>
-                {% endfor %}
-            </table>
+        <div id="wrap">
+            <div id="first">
+                <table id="weeklySales" class="row-head-table">
+                    <thead>
+                        <tr>
+                            <th colspan="2">주간 판매정보</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <th>주간판매량</th>
+                            <td>{{ weekSalesCnt }}</td>
+                        </tr>
+                        <tr>
+                            <th>주간판매합계</th>
+                            <td>{{ weekSalesSum }}원</td>
+                        </tr>
+                    </tbody>
+                </table>
+                <table class="sales-table" id="deliveryStatus">
+                    <thead>
+                        <tr>
+                            <th>배송상태</th>
+                            <th>건수</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        {% for obj in deliveryList %}
+                        <tr>
+                            <td>{{ obj.DELIVERY_STATUS__STATUS }}</td>
+                            <td>{{ obj.cnt }}</td>
+                        </tr>
+                        {% endfor %}
+                    </tbody>
+                </table>
+            </div>
+
+            <br/>
+            <hr>
+
+            <div id="rank">
+                <div class="rank">
+                    <div class="tb-title">주문횟수 Top 5</div>
+                    <table class="sales-table" id="orderRank">
+                        <thead>
+                            <tr>
+                                <th>순위</th>
+                                <th>아이디</th>
+                                <th>주문횟수</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            {% for obj in cntTopList %}
+                            <tr>
+                                <td>{{ obj.row }}</td>
+                                <td>{{ obj.CUSTOMER_NO__CUSTOMER_ID }}</td>
+                                <td>{{ obj.cnt}}</td>
+                            </tr>
+                            {% endfor %}
+                            {% if cntTopList_blank %}
+                            {% for i in cntTopList_blank %}
+                            <tr>
+                                <td>&nbsp;</td>
+                                <td>&nbsp;</td>
+                                <td>&nbsp;</td>
+                            </tr>
+                            {% endfor %}
+                            {% endif %}
+                        </tbody>
+                    </table>
+                </div>
+                
+                <div class="rank">
+                    <div class="tb-title">주문금액 Top 5</div>
+                    <table class="sales-table">
+                        <thead>
+                            <tr>
+                                <th>순위</th>
+                                <th>아이디</th>
+                                <th>금액</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            {% for obj in amtTopList %}
+                            <tr>
+                                <td>{{ obj.row }}</td>
+                                <td>{{ obj.CUSTOMER_NO__CUSTOMER_ID }}</td>
+                                <td>{{ obj.TOTAL_AMOUNT}}</td>
+                            </tr>
+                            {% endfor %}
+                            {% if amtTopList_blank %}
+                            {% for i in amtTopList_blank %}
+                            <tr>
+                                <td>&nbsp;</td>
+                                <td>&nbsp;</td>
+                                <td>&nbsp;</td>
+                            </tr>
+                            {% endfor %}
+                            {% endif %}
+                        </tbody>
+                    </table>
+                </div>
+                
+                <div class="rank">
+                    <div class="tb-title">판매상품 Top 5</div>
+                    <table class="sales-table">
+                        <thead>
+                            <tr>
+                                <th>순위</th>
+                                <th>상품명</th>
+                                <th>판매횟수</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            {% for obj in itemList %}
+                            <tr>
+                                <td>{{ obj.row }}</td>
+                                <td>{{ obj.GOODS_NAME }}</td>
+                                <td>{{ obj.cnt}}</td>
+                            </tr>
+                            {% endfor %}
+                            {% if itemList_blank %}
+                            {% for i in itemList_blank %}
+                            <tr>
+                                <td>&nbsp;</td>
+                                <td>&nbsp;</td>
+                                <td>&nbsp;</td>
+                            </tr>
+                            {% endfor %}
+                            {% endif %}
+                        </tbody>
+                    </table>
+                </div>
+                
+            </div>
         </div>
-
-        <div>
-            <table class="sales-table">
-                <tr>
-                    <th>순위</th>
-                    <th>아이디</th>
-                    <th>주문횟수</th>
-                </tr>
-                {% for obj in cntTopList %}
-                <tr>
-                    <td>{{ obj.row }}</td>
-                    <td>{{ obj.CUSTOMER_NO__CUSTOMER_ID }}</td>
-                    <td>{{ obj.cnt}}</td>
-                </tr>
-                {% endfor %}
-            </table>
-
-            <table class="sales-table">
-                <tr>
-                    <th>순위</th>
-                    <th>아이디</th>
-                    <th>금액</th>
-                </tr>
-                {% for obj in amtTopList %}
-                <tr>
-                    <td>{{ obj.row }}</td>
-                    <td>{{ obj.CUSTOMER_NO__CUSTOMER_ID }}</td>
-                    <td>{{ obj.TOTAL_AMOUNT}}</td>
-                </tr>
-                {% endfor %}
-            </table>
-
-            <table class="sales-table">
-                <tr>
-                    <th>순위</th>
-                    <th>상품명</th>
-                    <th>판매횟수</th>
-                </tr>
-                {% for obj in itemList %}
-                <tr>
-                    <td>{{ obj.row }}</td>
-                    <td>{{ obj.GOODS_NAME }}</td>
-                    <td>{{ obj.cnt}}</td>
-                </tr>
-                {% endfor %}
-            </table>
-        </div>
-
-
-
     </div>
     {% endblock %}
   

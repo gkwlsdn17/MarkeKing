@@ -1,0 +1,45 @@
+
+#wrap{
+    margin: 50px auto;
+    height: 100%;
+}
+
+.sales-table{  text-align: center; margin-top: 20px; width: 450px;   border: 1px solid black; float: left;}
+.sales-table > thead > tr > th{ background-color: black; color: white; }
+.sales-table > thead > tr, .sales-table > tbody > tr{ height: 50px; }
+.sales-table > tbody > tr:nth-child(odd){ background-color: white; }
+.sales-table > tbody > tr:nth-child(even){ background-color: #EDEFF1; }
+.sales-table > tbody > tr:hover .td{ background-color: skyblue; cursor: pointer; }
+
+#first{ 
+    overflow: hidden; 
+    margin-bottom: 20px; 
+    width: 900px; height: 350px;
+    margin: 10px auto;
+}
+#weeklySales{ 
+    width: 300px; 
+    float: left; 
+    margin: 10px 30px;
+    border: 1px solid black; 
+    text-align: center;
+}
+.row-head-table > thead > tr{ border-bottom: 1px solid white; }
+.row-head-table > thead > tr, #weeklySales > tbody > tr{ height: 50px;  }
+.row-head-table > thead> tr > th{ background-color: black; color: white; }
+.row-head-table > tbody> tr > th{ background-color: gray; color: white; border-bottom: 1px solid white;}
+.row-head-table > tbody> tr > td{ border-bottom: 1px solid black;}
+.row-head-table > tbody > tr:nth-last-child(1) > th{  border-bottom: 1px solid black;}
+
+#deliveryStatus{ width: 300px; height: 300px; margin: 10px 30px 10px 100px;}
+
+
+#rank{
+    overflow: hidden; 
+    width: 100%;
+    margin: 70px auto;
+    clear: both;
+}
+
+.rank{ float: left; text-align: center; width: 450px; margin-left: 100px;}
+.tb-title{ font-size: 20px; font-weight: bold;}

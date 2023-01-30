@@ -36,10 +36,14 @@ def pageSalesMain(request):
         cntTopList = getOrderCntTopList(q, 5)
         if cntTopList:
             content['cntTopList'] = cntTopList
+            if cntTopList.count != 5:
+                content['cntTopList_blank'] = [0 for i in range(5-cntTopList.count())]
 
         amtTopList = getOrderAmtTopList(q, 5)
         if amtTopList:
             content['amtTopList'] = amtTopList    
+            if amtTopList.count != 5:
+                content['amtTopList_blank'] = [0 for i in range(5-amtTopList.count())]
 
         # for i in cntTopList:
         #     print(i)
@@ -52,15 +56,22 @@ def pageSalesMain(request):
         itemList = getItemTopList(q2 ,5)
         if itemList:
             content['itemList'] = itemList
-        # for i in itemList:
-        #     print(i)
+            if itemList.count != 5:
+                content['itemList_blank'] = [0 for i in range(5-itemList.count())]
 
 
         deliveryList = getDeliveryStatus(q2)
+        statusList = getStatusList()
+        slist = []
+        for status in statusList:
+            item = next((item for item in deliveryList if item.get('DELIVERY_STATUS_id') == status.id),None)
+            if item is None:
+                slist.append({'Delivery_status_id': status.id, 'DELIVERY_STATUS__STATUS': status.STATUS, 'cnt': 0})
+            else:
+                slist.append(item)
+        
         if deliveryList:
-            content['deliveryList'] = deliveryList
-        # for i in deliveryList:
-        #     print(i)
+            content['deliveryList'] = slist
 
         
     except Exception as e:
@@ -105,8 +116,22 @@ def getItemTopList(q, limit):
 
 def getDeliveryStatus(q):
     try:
-        list = Delivery.objects.all().filter(q).values('DELIVERY_STATUS_id', 'DELIVERY_STATUS__STATUS').annotate(cnt = Count('DELIVERY_STATUS_id')).values(
+        list = Delivery.objects.all().filter(q).values('DELIVERY_STATUS_id', 'DELIVERY_STATUS__STATUS').annotate(
+            cnt = Count('DELIVERY_STATUS_id')).values(
             'cnt', 'DELIVERY_STATUS_id', 'DELIVERY_STATUS__STATUS').order_by('DELIVERY_STATUS_id')
+        
+        return list
+    except Exception as e:
+        logger.error(e)
+        return None
+
+def getStatusList():
+    try:
+        # list = DeliveryStatus.objects.all().filter(q).values('DELIVERY_STATUS_id', 'DELIVERY_STATUS__STATUS').annotate(
+        #     cnt = Count('DELIVERY_STATUS_id')).values(
+        #     'cnt', 'DELIVERY_STATUS_id', 'DELIVERY_STATUS__STATUS').order_by('DELIVERY_STATUS_id')
+
+        list = DeliveryStatus.objects.all().filter(DISCARD=False)
         return list
     except Exception as e:
         logger.error(e)
