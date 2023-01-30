@@ -22,3 +22,37 @@
     position: relative;
     height: 100%;
 }
+
+.btn-blue{
+    border: none;
+    border-radius: 10px;
+    text-decoration: none;
+    font-weight: 400;
+    transition: 0.25s;
+    background-color: #40AFFF;
+    color: white;
+
+}
+
+.btn-blue:hover {
+	color: white;
+    background: #80CAFF;
+    opacity: 80%;
+}
+
+.btn-green{
+    border: none;
+    border-radius: 10px;
+    text-decoration: none;
+    font-weight: 400;
+    transition: 0.25s;
+    background-color: #009000;
+    color: white;
+
+}
+
+.btn-green:hover {
+	color: white;
+    background: #66CC00;
+    opacity: 80%;
+}
