@@ -6,6 +6,10 @@ html, body{
     
 }
 
+#content{
+    min-height: 880px;
+}
+
 @font-face {
     font-family: 'BMDOHYEON';
     src: url('../font/BMDOHYEON_ttf.ttf');
@@ -58,11 +62,17 @@ header *{
 }
 #login-bar { width: 100%; height: 30px; overflow: hidden;}
 #login-bar > div { float: right; }
-#login-bar > div > div { float:left; margin: 5px; }
+#login-bar > div > div { 
+    float:left; 
+    color: white;
+}
 #login-bar > div > a {  
+    float:left; 
     color: white; 
-    margin: 20px;
     text-decoration: none;
+}
+.login-bar{
+    margin: 5px;
 }
 
 #header-nav{ width: 100%; height: 70px; }
@@ -105,7 +115,24 @@ header *{
 footer{
     height: 150px;
     background-color: black;
+    color: white;
     clear: both;
+    padding: 50px;
+}
+
+footer a{
+    text-decoration: none;
+    color: white;
+    display: block;
+
+}
+footer a:hover{
+    text-decoration: none;
+    color: gray;
+}
+
+.footer-line{
+    margin-top: 10px;
 }
 
 .table{  text-align: center; margin-top: 20px; }
@@ -119,3 +146,20 @@ footer{
 .page-bar > ul{ text-align: center; margin-left: auto; margin-right: auto;}
 .page-bar ul > li{ display: inline-block; margin-left: 10px; }
 .page-bar ul > li > a{ font-size: 20px;}
+
+.circle{
+    width: 150px;
+    height: 150px;
+    border-radius: 50%;
+    -webkit-border-redius:50%;
+    -moz-border-radius:50%;
+    background: #FFFF80;
+    font-size: 32px;
+    text-align: center;
+    line-height: 150px;
+
+    border: 6px solid #fff;
+    box-shadow: 0 0 16px rgb(221,221,221);
+    -webkit-box-shadow: 0 0 16px rgb(221,221,221);
+    -moz-box-shadow: 0 0 16px rgb(221,221,221);
+}

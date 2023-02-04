@@ -44,11 +44,6 @@ def pageSalesMain(request):
             content['amtTopList'] = amtTopList    
             if amtTopList.count != 5:
                 content['amtTopList_blank'] = [0 for i in range(5-amtTopList.count())]
-
-        # for i in cntTopList:
-        #     print(i)
-        # for i in amtTopList:
-        #     print(i)
         
         q2 = Q(ORDER_NO__DISCARD=False)
         q2 &= Q(ORDER_NO__ORDER_DATE__range=(startDate, endDate))
@@ -127,10 +122,6 @@ def getDeliveryStatus(q):
 
 def getStatusList():
     try:
-        # list = DeliveryStatus.objects.all().filter(q).values('DELIVERY_STATUS_id', 'DELIVERY_STATUS__STATUS').annotate(
-        #     cnt = Count('DELIVERY_STATUS_id')).values(
-        #     'cnt', 'DELIVERY_STATUS_id', 'DELIVERY_STATUS__STATUS').order_by('DELIVERY_STATUS_id')
-
         list = DeliveryStatus.objects.all().filter(DISCARD=False)
         return list
     except Exception as e:

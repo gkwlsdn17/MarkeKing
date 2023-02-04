@@ -64,6 +64,20 @@ class Dao():
         
         return customer
 
+    def updateCustomerLastVisit(self, id):
+        cursor = connection.cursor()
+        try:
+
+            query = f'''UPDATE main_customer SET LAST_VISIT = datetime('now','localtime') WHERE id = {id}'''
+            cursor.execute(query)
+            res = cursor.fetchone()
+
+        except Exception as e:
+            traceback.print_exc()
+        finally:
+            cursor.close()
+        
+
     def insertOrder(self, cid, orderDate, amount):
         c = connection.cursor()
         result = False

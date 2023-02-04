@@ -39,6 +39,7 @@ def login(request):
         
         if customer.CUSTOMER_PW == pw:
             request.session['markeking_shop_user_id'] = id
+            dao.updateCustomerLastVisit(customer.id)
             print('login success')
             return redirect("/")
 

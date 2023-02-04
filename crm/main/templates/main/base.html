@@ -2,13 +2,14 @@
 <html>
     <head>
         <link rel="stylesheet" type="text/css" href="{% static 'css/common.css' %}">
+        <link rel="shortcut icon" href="#">
     </head>
     <body>
         <header>
             <div id="login-bar">
                 <div>
-                    <div id="welcome">{{ request.session.user_name }}님 환영합니다</div>
-                    <a href="/login/logout">로그아웃</a>
+                    <div id="welcome" class="login-bar">{{ request.session.user_name }}님 환영합니다</div>
+                    <a href="/login/logout" class="login-bar">로그아웃</a>
                 </div>
             </div>
             <div id="header-nav">
@@ -28,7 +29,11 @@
         
         {% endblock %}
         <footer>
-            <div>여기는 footer</div>
+            <div id="footerWrap">
+                <div class="footer-line">Developer: HeeKyung-Kwon</div>
+                <a class="footer-line" href="https://github.com/gkwlsdn17/MarkeKing" target="_blank">Git 방문하기</a>
+                <a class="footer-line" href="http://127.0.0.1:8001/" target="_blank">Shop 방문하기</a>
+            </div>
         </footer>
     </body>
 </html>

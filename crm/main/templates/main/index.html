@@ -14,12 +14,98 @@
     <!-- Latest compiled JavaScript -->
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@4.6.1/dist/js/bootstrap.bundle.min.js"></script>
 
+    <style>
+        #content{
+            width: 100%;
+        }
+        #count{
+            width: 90%;
+            margin: 50px auto;
+        }
+        .left{
+            float: left;
+        }
+        .right{
+            float: right;
+        }
+        .wrap{
+            width: 600px;
+            height: 400px;
+            text-align: center;
+            margin: 50px 10px;
+            padding: 10px;
+            border: 1px solid black;
+            border-radius: 10px;
+            position: relative;
+        }
+        .box-title{
+            margin: 20px;
+            font-size: 18px;
+            font-weight: bold;
+        }
+        .box-wrap{
+            overflow: hidden;
+            margin: 10px 30px;
+        }
+        .box{
+            margin: 10px;
+        }
+        
+
+        #visitCount{
+            clear: both;
+        }
+
+    </style>
 </head>
 <body>
     {% extends 'main/base.html' %}
     {% block contents %}
     <container>
-
+        <div id="content">
+            <div id="count">
+                <div class="right">주간 기준 {{weekStartDate}} ~ {{weekEndDate}}</div>
+            
+                <div id="visitCount" class="left wrap">
+                    <div class="box-title">회원 방문 횟수</div>
+                    <div class="box-wrap">
+                        <div class="box left">
+                            <div>일간</div>
+                            <div class="circle">{{ todayCount }}</div>
+                        </div>
+                        <div class="box left">
+                            <div>주간</div>
+                            <div class="circle">{{ weekCount }}</div>
+                        </div>
+                        <div class="box left">
+                            <div>월간</div>
+                            <div class="circle">{{ monthCount }}</div>
+                        </div>
+                    </div>
+                    
+                    
+                </div>
+                
+                <div id="orderCount" class="left wrap">
+                    <div class="box-title">주문 횟수</div>
+                    <div class="box-wrap">
+                        <div class="box left">
+                            <div>일간</div>
+                            <div class="circle">{{ todayOrderCount }}</div>
+                        </div>
+                        <div class="box left">
+                            <div>주간</div>
+                            <div class="circle">{{ weekOrderCount }}</div>
+                        </div>
+                        <div class="box left">
+                            <div>월간</div>
+                            <div class="circle">{{ monthOrderCount }}</div>
+                        </div>
+                    </div>
+                    
+                </div>
+            </div>
+        </div>
     </container>
     {% endblock contents %}
     
