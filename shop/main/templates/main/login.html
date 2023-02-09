@@ -5,17 +5,45 @@
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>마케킹 - 로그인</title>
+    <style>
+        #wrap{
+            width: 500px;
+            height: 300px;
+            margin: 200px auto;
+            text-align: center;
+            border: 1px solid gray;
+            padding: 100px;
+        }
+        #login_title{
+            text-align: center;
+            margin: 20px auto;
+        }
+        .ipt-login{
+            width: 100%;
+            margin-top: 10px;
+            margin-bottom: 10px;
+        }
+        #btn_login{
+            display: block;
+            width: 100%;
+        }
+        #btn_signup{
+            width: 500px;
+            margin-top: 10px;
+        }
+
+    </style>
 </head>
 <body>
     <div id="wrap">
-        <div>로그인</div>
+        <div id="login_title">로그인</div>
         <form action="/login/check" method="post"> {% csrf_token %}
-            <div>ID:</div><input type="text" name="id">
-            <div>PW:</div><input type="password" name="pw">
-            <button>로그인</button>
+            <div>ID</div><input class="ipt-login" type="text" name="id">
+            <div>PW</div><input class="ipt-login" type="password" name="pw">
+            <button id="btn_login">로그인</button>
         </form>
         
-        <button onclick="location.href='/signup'">회원가입</button>
+        <button id="btn_signup" onclick="location.href='/signup'">회원가입</button>
     </div>
 </body>
 </html>

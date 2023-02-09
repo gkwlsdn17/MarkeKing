@@ -5,20 +5,58 @@
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=\, initial-scale=1.0">
     <title>마케킹 - 회원가입</title>
+    <style>
+        #wrap{
+            width: 600px;
+            height: 500px;
+            border: 1px solid gray;
+            border-radius: 20px;
+            margin: 100px auto;
+            padding: 50px;
+        }
+        .ipt-wrap{
+            width: 100%;
+            clear: both;
+            margin: 20px auto;
+            height: 30px;
+        }
+        .ipt-title{
+            float: left;
+            width: 70px;
+            text-align: end;
+            height: 30px;
+        }
+        .ipt-text{
+            width: 500px;
+            margin-left: 10px;
+            margin-right: 10px;
+            height: 30px;
+        }
+        .ipt-radio{
+            margin-left: 20px;
+        }
+        #btn_signup{
+            width: 100%;
+            margin-top: 20px;
+            height: 30px;
+        }
+        
+    </style>
 </head>
 <body>
-    <form action="/signup/check" method="post"> {% csrf_token %}
-        <div>아이디:</div><input name="id"  type="text">
-        <div>비밀번호:</div><input name="pw" type="password">
-        <div>이름:</div><input name="name" type="text">
-        <div>생년월일:</div><input name="birth" type="text">
-        <div>핸드폰:</div><input name="phone" type="text">
-        <div>이메일:</div><input name="email" type="text">
-        <div>우편번호:</div><input name="zipcode" type="text">
-        <div>주소:</div><input name="addr" type="text">
-        <div>성별:</div><input name="sex" type="text">
-        <button type="submit">회원가입</button>
-    </form>
-    
+    <div id="wrap">
+        <form action="/signup/check" method="post"> {% csrf_token %}
+            <div class="ipt-wrap"><div class="ipt-title">아이디:</div>  <input class="ipt-text" name="id"  type="text"></div>
+            <div class="ipt-wrap"><div class="ipt-title">비밀번호:</div><input class="ipt-text" name="pw" type="password"></div>
+            <div class="ipt-wrap"><div class="ipt-title">이름:</div>    <input class="ipt-text" name="name" type="text"></div>
+            <div class="ipt-wrap"><div class="ipt-title">생년월일:</div><input class="ipt-text" name="birth" type="text"></div>
+            <div class="ipt-wrap"><div class="ipt-title">핸드폰:</div>  <input class="ipt-text" name="phone" type="text"></div>
+            <div class="ipt-wrap"><div class="ipt-title">이메일:</div>  <input class="ipt-text" name="email" type="text"></div>
+            <div class="ipt-wrap"><div class="ipt-title">우편번호:</div><input class="ipt-text" name="zipcode" type="text"></div>
+            <div class="ipt-wrap"><div class="ipt-title">주소:</div>    <input class="ipt-text" name="addr" type="text"></div>
+            <div class="ipt-wrap"><div class="ipt-title">성별:</div>    <input class="ipt-radio" name="sex" type="radio" value="1" checked>남<input class="ipt-radio" name="sex" type="radio" value="2">여</div>
+            <button id="btn_signup" type="submit">회원가입</button>
+        </form>
+    </div>
 </body>
 </html>

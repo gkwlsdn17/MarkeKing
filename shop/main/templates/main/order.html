@@ -14,6 +14,24 @@
     <!-- Latest compiled JavaScript -->
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@4.6.1/dist/js/bootstrap.bundle.min.js"></script>
 
+    <style>
+        #wrap{
+            width: 700px;
+            margin: 20px auto;
+        }
+        .title{ text-align: center;}
+        #item_wrap{
+            clear: both;
+        }
+        .item{
+            float: left;
+            margin: 10px;
+        }
+        #order_info{
+            clear: both;
+        }
+    </style>
+
     <script>
         var items = []
         $(document).ready(function(){  
@@ -40,6 +58,7 @@
 <body>
     <div id="wrap">
         <form id="form" onsubmit="return false" action="/order/submit", method="post", charset="utf-8">{% csrf_token %}
+            <div class="title">주문 내역</div>
             {% for item in goods %}
             <script>
                 items.push({
@@ -49,12 +68,18 @@
                     'GOODS_PRICE':'{{item.GOODS_PRICE}}',
                 });
             </script>       
-            <div>{{item.GOODS_NAME}}</div>
+            <div id="item_wrap">
+                <div class="item">{{item.GOODS_NAME}}</div>
+                <div class="item">{{item.GOODS_PRICE}}</div>
+                <div class="item">{{item.GOODS_COUNT}}</div>
+            </div>
             {% endfor %}
-            <div>배송지설정</div>
-            <div>받는분</div><input type="text" name="dname"> 
-            <div>배송지 주소</div><input type="text" name="daddr">
-            <div>배송지 전화번호</div><input type="text" name="dphone">
+            <div id="order_info">
+                <div class="title">배송지설정</div>
+                <div>받는분</div><input type="text" name="dname"> 
+                <div>배송지 주소</div><input type="text" name="daddr">
+                <div>배송지 전화번호</div><input type="text" name="dphone">
+            </div>
             <button type="button" onclick="orderSubmit()">주문하기</button>
         </form>
         

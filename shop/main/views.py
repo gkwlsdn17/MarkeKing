@@ -75,13 +75,7 @@ def signup(request):
         zipcode = request.POST.get('zipcode')
         addr = request.POST.get('addr')
         sex = request.POST.get('sex') 
-
-        if sex == '남':
-            sex = 1
-        elif sex == '여':
-            sex = 2
-        else:
-            sex = 0
+        
        
         dao = Dao()
         count = dao.getCustomerIdCount(id)
@@ -98,6 +92,7 @@ def signup(request):
 def pageOrder(request):
     content = {}
     goods = json.loads(request.POST.get('goods'))
+    print(goods)
     content['goods'] = goods
     return render(request, 'main/order.html', content)
 
