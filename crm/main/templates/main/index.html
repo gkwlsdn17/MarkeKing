@@ -19,7 +19,7 @@
             width: 100%;
         }
         #count{
-            width: 90%;
+            width: 1300px;
             margin: 50px auto;
         }
         .left{
@@ -30,11 +30,11 @@
         }
         .wrap{
             width: 600px;
-            height: 400px;
+            height: 300px;
             text-align: center;
             margin: 50px 10px;
             padding: 10px;
-            border: 1px solid black;
+            /* border: 1px solid black; */
             border-radius: 10px;
             position: relative;
         }
@@ -55,6 +55,25 @@
         #visitCount{
             clear: both;
         }
+        .link{
+            text-decoration: none;
+            color: gray;
+            cursor: pointer;
+        }
+        .link:hover{
+            text-decoration: none;
+        }
+
+        #cstable{
+            width: 600px;
+            height: 250px;
+        }
+
+        .row-head-table > tbody> tr > th{ background-color: black; color: white; border-bottom: 1px solid white; width: 40%; }
+        .row-head-table > tbody> tr > td{ border-bottom: 1px solid black; border-right: 1px solid black;}
+        .row-head-table > tbody > tr:nth-last-child(1) > th{  border-bottom: 1px solid black;}
+        .row-head-table > tbody > tr:nth-child(1) > th, .row-head-table > tbody > tr:nth-child(1) > td{  border-top: 1px solid black;}
+        #customerLink{ margin-bottom: 15px; }
 
     </style>
 </head>
@@ -103,6 +122,48 @@
                         </div>
                     </div>
                     
+                </div>
+
+                <div id="customerStatus" class="left wrap">
+                    <div class="box-title">회원가입 현황</div><a id="customerLink" class="link right" href="/customer/">고객관리 바로가기</a>
+                    <table id="cstable" class="row-head-table">
+                        <tbody>
+                            <tr>
+                                <th>전체</th>
+                                <td>{{ customerCnt.allCnt }}</td>
+                            </tr>
+                            <tr>
+                                <th>주간</th>
+                                <td>{{ customerCnt.weekCnt }}</td>
+                            </tr>
+                            <tr>
+                                <th>일간</th>
+                                <td>{{ customerCnt.todayCnt }}</td>
+                            </tr>
+                        </tbody>
+                    </table>
+                    
+
+                </div>
+
+                <div id="orderStatus" class="left wrap">
+                    <div class="box-title">주문 진행중</div><a class="link right" href="/sales/delivery/list/">배송현황 바로가기</a>
+                    <table class="table">
+                        <thead>
+                            <th>아이디</th>
+                            <th>이름</th>
+                            <th>배송상태</th>
+                        </thead>
+                        <tbody>
+                            {% for order in orderList %}
+                            <tr>
+                                <td>{{ order.CUSTOMER_NO__CUSTOMER_ID }}</td>
+                                <td>{{ order.CUSTOMER_NO__CUSTOMER_NAME}}</td>
+                                <td>{{ order.DELIVERY_STATUS__STATUS }}</td>
+                            </tr>
+                            {% endfor %}
+                        </tbody>
+                    </table>
                 </div>
             </div>
         </div>
