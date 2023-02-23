@@ -1,0 +1,51 @@
+#wrap{
+    width: 600px;
+    height: 600px;
+    border: 1px solid #BFBFC3;
+    border-radius: 20px;
+    margin: 100px auto;
+    padding: 50px;
+}
+.signup-logo{
+    text-align: center;
+    font-size: 36px;
+    margin-bottom: 40px;
+}
+.ipt-wrap{
+    width: 100%;
+    clear: both;
+    margin: 20px auto;
+    height: 30px;
+}
+.ipt-title{
+    float: left;
+    width: 70px;
+    text-align: end;
+    height: 30px;
+    margin-top: 10px;
+}
+.ipt-text{
+    float: left;
+    width: 500px;
+    margin-left: 10px;
+    margin-right: 10px;
+    height: 30px;
+    border: 1px solid #BFBFC3;
+    box-shadow: 0 5px 5px rgba(0, 0, 0, 0.2);
+}
+.ipt-radio{
+    float: left;
+    margin-left: 20px;
+    height: 30px;
+}
+.radio-tag{
+    float: left;
+    margin-top: 5px;
+    margin-left: 5px;
+}
+#btn_signup{
+    width: 100%;
+    margin-top: 20px;
+    height: 35px;
+    padding: 0;
+}

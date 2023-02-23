@@ -10,15 +10,22 @@ import traceback
 def index(request):
     content = {}
     try:
+        dao = Dao()
         try:
             user_id = request.session['markeking_shop_user_id']
             content['user_id'] = user_id
+            
+            user = dao.getCustomer(user_id)
+            content['customer'] = user
         except Exception as e:
             # print(e)
             pass
-        dao = Dao()
         items = dao.getGoodsList()
         content['items'] = items
+
+        menu_list = dao.getMenuList()
+        content['menu_list'] = menu_list
+        
 
     except Exception as e:
         traceback.print_exc()

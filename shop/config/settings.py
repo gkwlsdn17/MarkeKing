@@ -24,7 +24,7 @@ BASE_DIR = Path(__file__).resolve().parent.parent
 SECRET_KEY = 'django-insecure-1(og0$l-%*m!cepa_&t0i46#gn+v#8=ud@(ij+jnp4u2gl1ygp'
 
 # SECURITY WARNING: don't run with debug turned on in production!
-DEBUG = False
+DEBUG = True
 
 ALLOWED_HOSTS = ['*']
 
@@ -119,6 +119,13 @@ USE_TZ = True
 
 STATIC_URL = '/static/'
 STATICFILES_DIRS = [os.path.join(BASE_DIR, 'static')]
+
+
+MEDIA_URL = '/media/'
+
+PROJECT_ROOT = Path(__file__).resolve().parent.parent.parent
+CRM_MEDIA =str(PROJECT_ROOT) + '\crm\media'
+MEDIA_ROOT = CRM_MEDIA
 
 # Default primary key field type
 # https://docs.djangoproject.com/en/4.1/ref/settings/#default-auto-field

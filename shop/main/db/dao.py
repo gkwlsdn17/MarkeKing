@@ -12,10 +12,12 @@ class Dao():
         try:
                     
             query = f'''
-            SELECT main_goods.id, main_goods.NAME, main_goods.PRICE, main_goodstype.NAME
+            SELECT main_goods.id, main_goods.NAME, main_goods.PRICE, main_goodstype.NAME, main_goodsimage.IMAGE_PATH
             FROM main_goods join main_goodstype
             ON main_goods.TYPE_id = main_goodstype.id
-            ORDER BY main_goods.id DESC LIMIT 10
+            join main_goodsimage
+			on main_goods.IMAGE_id = main_goodsimage.id
+            ORDER BY main_goods.id DESC LIMIT 16
             '''
             
             res = c.execute(query)
@@ -184,4 +186,21 @@ class Dao():
         finally:
             c.close()
         
-        return result
+        return 
+        
+    def getMenuList(self):
+        c = connection.cursor()
+        list = None
+        try:
+            query = f'''
+            SELECT * FROM main_goodstype WHERE DISCARD = 0 ORDER BY id;
+            '''
+            res = c.execute(query)
+            list = c.fetchall()
+
+        except:
+            traceback.print_exc()
+        finally:
+            c.close()
+        
+        return list
