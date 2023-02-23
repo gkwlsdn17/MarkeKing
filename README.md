@@ -5,8 +5,9 @@
 shop - 쇼핑몰<br/>
 crm - CRM 사이트<br/>
 <br/>
-개발언어: python, javascript
-프레임워크: django
-DB: sqlite
+개발언어: python, javascript<br/>
+프레임워크: django<br/>
+DB: sqlite<br/>
 <br/>
-개발인원: 1명
+개발인원: 1명<br/>
+<br/>
