@@ -38,6 +38,7 @@ class Goods(models.Model):
     TYPE = models.ForeignKey('GoodsType', on_delete=models.DO_NOTHING)
     BARCODE = models.CharField(max_length=100, default='')
     PRICE = models.IntegerField(default=0)
+    IMAGE = models.ForeignKey('GoodsImage', on_delete=models.DO_NOTHING, blank=True, null=True)
     CRTIME = models.DateTimeField(auto_now=True)
     DISCARD = models.BooleanField(default=False)
 
@@ -111,3 +112,17 @@ class DeliveryCompany(models.Model):
     COMPANY_PHONE = models.CharField(max_length=100)
     CRTIME = models.DateTimeField(auto_now=True)
     DISCARD = models.BooleanField(default=False)
+
+class GoodsImage(models.Model):
+    IMAGE_PATH = models.ImageField(upload_to='images/%Y/%m/%d', blank=True)
+    CRTIME = models.DateTimeField(auto_now=True)
+    DISCARD = models.BooleanField(default=False)
+
+    def __str__(self):
+        return f'''
+        IMAGE_PATH={self.IMAGE_PATH}
+        ,CRTIME={self.CRTIME}
+        ,DISCARD={self.DISCARD}
+        '''
+
+

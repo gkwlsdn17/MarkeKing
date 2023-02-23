@@ -6,3 +6,13 @@
 #btn_delete{
     margin-left: 10px;
 }
+
+#goods_img{
+    height: 300px;
+    margin-bottom: 10px;
+}
+
+#update_img{
+    display: block;
+    margin-top: 20px;
+}

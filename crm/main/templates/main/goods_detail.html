@@ -14,9 +14,42 @@
     <!-- Latest compiled JavaScript -->
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@4.6.1/dist/js/bootstrap.bundle.min.js"></script>
     <script>
-        function deleteGoods(id){
+        $(document).ready(function(){
+            function deleteGoods(id){
             location.href = '/goods/delete/' + id;
-        }
+            }
+            function getImage(e){
+                var files = e.currentTarget.files;
+
+                [...files].forEach(file => {
+                    if (!file.type.match("image/.*")) {
+                        alert('이미지 파일만 업로드가 가능합니다.');
+                        return;
+                    }
+                })
+
+                if ([...files].length > 1) {
+                    alert('이미지는 최대 1개 까지 업로드가 가능합니다.');
+                    return;
+                }
+
+                
+                console.log('imageChange')
+                console.log(files[0])
+
+                var reader = new FileReader();
+                reader.onload = (e) => {
+                    document.getElementById('img').setAttribute('src', e.target.result);
+                    document.getElementById('img').setAttribute('data-file', files[0].name);
+                };
+                reader.readAsDataURL(files[0]);
+            }
+            
+            var imgUpload = document.getElementById('input_goods_image')
+            imgUpload.addEventListener('change', getImage);
+        });
+        
+        
     </script>
     
 </head>
@@ -26,7 +59,7 @@
     {% block main %}
     <div id="content">
         <div class="goods-input-div">
-            <form id="update_form" action="/goods/update/" method="post"> {% csrf_token %}
+            <form id="update_form" action="/goods/update/" method="post" enctype="multipart/form-data"> {% csrf_token %}
                 <input type="hidden" name="goods_id" value="{{ goods.id }}"/>
                 <div>상품명: <input type="text" name="goods_name" value="{{ goods.NAME }}"></div>
                 <div>상품 타입: 
@@ -42,6 +75,17 @@
                 </div>
                 <div>바코드: <input type="text" name="goods_barcode" value="{{ goods.BARCODE }}"></div>
                 <div>가격: <input type="text" name="goods_price" value="{{ goods.PRICE }}"></div>
+                <div>
+                    <div id="goods_img">
+                        <div>이미지</div>
+                        <image id="img" src="/media/{{ goods.IMAGE.IMAGE_PATH }}" style="width:150px; height:150px;"></image>
+                    </div>
+                    <div id="update_img">
+                        <label for="goods_image">이미지 수정하기</label>
+                        <input id="input_goods_image" type="file" name="goods_image"/>
+                    </div>
+                    
+                </div>
             </form>
             <div>
                 <button class="btn" type="submit" form="update_form">상품 수정</button>

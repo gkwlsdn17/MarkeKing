@@ -10,6 +10,7 @@ import datetime
 from dateutil.relativedelta import relativedelta
 from django.utils.dateparse import parse_datetime
 import logging
+import traceback
 logger = logging.getLogger('goods')
 
 @login_required
@@ -44,7 +45,7 @@ def pageGoodsMain(request):
 
         q &= Q(DISCARD = False)
 
-        goods_list = Goods.objects.all().filter(q)
+        goods_list = Goods.objects.all().filter(q).order_by('-id')
         page = request.GET.get('page', '1')
         paginator = Paginator(goods_list, '10')
         page_obj = paginator.page(page)
@@ -99,6 +100,7 @@ def goodsDetail(request , goods_id):
             return redirect("pageGoodsMain")
 
         goods = Goods.objects.get(id = goods_id)
+        
         goods_type = GoodsType.objects.all().filter(DISCARD=False)
         context = {'goods': goods, 'types': goods_type}
         return render(request, 'main/goods_detail.html', context)
@@ -114,7 +116,10 @@ def updateGoods(request):
         type = request.POST.get('goods_type')
         barcode = request.POST.get('goods_barcode')
         goods_price = request.POST.get('goods_price')
+        goods_image = request.FILES.get('goods_image')
 
+        print(f'goods_image: {goods_image}')
+        
         goodsType = GoodsType.objects.get(id= type)
 
         goods = Goods.objects.get(id = id)
@@ -123,12 +128,27 @@ def updateGoods(request):
         goods.BARCODE = barcode
         goods.PRICE = goods_price
 
+        if goods_image:
+            image = GoodsImage(
+                IMAGE_PATH = goods_image
+            )
+            print(image)
+            image.save()
+            if goods.IMAGE:
+                existImage = GoodsImage.objects.get(id = goods.IMAGE.id)
+                existImage.DISCARD = True
+                existImage.save()
+
+            image = GoodsImage.objects.get(IMAGE_PATH = image.IMAGE_PATH, DISCARD = False)
+            goods.IMAGE = image
+
         goods.save()
         logger.info(f'UpdateGoods - {id} Update')
         return redirect('pageGoodsMain')
 
     except Exception as e:
         logger.error(e)
+        traceback.print_exc()
         return redirect('pageGoodsMain')
 
 @login_required
