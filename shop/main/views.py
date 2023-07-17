@@ -93,6 +93,7 @@ def signup(request):
 
     except Exception as e:
         traceback.print_exc()
+        return redirect("signup")
 
     return redirect("/")
 
